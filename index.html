@@ -1,0 +1,4419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Booty Builder &amp; Deep Core Tracker</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+  --bg:#14131a;
+  --surface:#1c1a24;
+  --surface2:#242130;
+  --border:#332f40;
+  --text:#f2eef5;
+  --text-dim:#a9a3b8;
+  --text-faint:#726c82;
+  --booty:#d6365f;
+  --booty-soft:#3a1c26;
+  --core:#3f9d8a;
+  --core-soft:#183a34;
+  --amber:#e0a458;
+  --done:#6fcf97;
+  --radius:10px;
+}
+
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; background:var(--bg); color:var(--text);
+  font-family:'Inter',system-ui,-apple-system,sans-serif; -webkit-font-smoothing:antialiased; }
+body{ padding-bottom:48px; }
+
+h1,h2,h3,.daytitle,.phasefullname,.brand,.pill{ font-family:'Oswald',system-ui,sans-serif; }
+
+.topbar{
+  position:sticky; top:0; z-index:20;
+  background:var(--bg); border-bottom:1px solid var(--border);
+  padding:14px 16px 10px; display:flex; flex-direction:column; gap:10px;
+}
+.brand{ font-size:1.35rem; font-weight:700; letter-spacing:0.02em; }
+.brand small{ display:block; font-family:'Inter'; font-weight:400; font-size:0.72rem; color:var(--text-faint); letter-spacing:0.04em; margin-top:2px; }
+
+.section-toggle{ display:flex; gap:8px; }
+.section-toggle button{
+  flex:1; padding:10px 8px; border-radius:var(--radius); border:1px solid var(--border);
+  background:var(--surface); color:var(--text-dim); font-family:'Oswald'; font-weight:600;
+  font-size:0.92rem; letter-spacing:0.02em; cursor:pointer; transition:all .15s;
+}
+.section-toggle button.active[data-section="booty"]{ background:var(--booty); border-color:var(--booty); color:#fff; }
+.section-toggle button.active[data-section="core"]{ background:var(--core); border-color:var(--core); color:#04120f; }
+
+#app{ max-width:640px; margin:0 auto; padding:14px 14px 40px; }
+
+.pillrow{ display:flex; gap:6px; overflow-x:auto; padding:6px 2px 10px; scrollbar-width:none; }
+.pillrow::-webkit-scrollbar{ display:none; }
+.pill{
+  flex:0 0 auto; padding:7px 14px; border-radius:999px; border:1px solid var(--border);
+  background:var(--surface); color:var(--text-dim); font-weight:600; font-size:0.85rem;
+  cursor:pointer; white-space:nowrap;
+}
+.pill.active.booty{ background:var(--booty); border-color:var(--booty); color:#fff; }
+.pill.active.core{ background:var(--core); border-color:var(--core); color:#04120f; }
+.daypills{ margin-top:-4px; }
+
+.phasefullname{ font-size:1.05rem; font-weight:600; margin:2px 2px 8px; color:var(--text); }
+.phasefullname .secnote{ display:inline; font-family:'Inter'; }
+
+.daycard{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px; margin-top:6px; }
+.dayhead{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+.daytitle{ font-size:1.15rem; font-weight:600; }
+.daysubtitle{ color:var(--text-dim); font-size:0.9rem; margin-top:2px; }
+
+.donetoggle{ display:flex; align-items:center; gap:5px; font-size:0.78rem; color:var(--text-dim); white-space:nowrap; cursor:pointer; }
+.donetoggle input{ width:18px; height:18px; accent-color:var(--done); }
+.donepair{ display:flex; gap:12px; }
+
+.seccard{ border-left:3px solid var(--border); padding:10px 12px; margin-bottom:10px; border-radius:0 8px 8px 0; background:var(--surface2); }
+.sec-main{ border-left-color:var(--booty); }
+.sec-pickone{ border-left-color:var(--amber); }
+.sec-ref{ border-left-color:var(--text-faint); }
+.seclabel{ font-family:'Oswald'; font-weight:600; font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim); margin-bottom:6px; }
+.reflist{ margin:0; padding-left:18px; color:var(--text); font-size:0.92rem; line-height:1.55; }
+.secnote{ color:var(--text-faint); font-size:0.78rem; margin-top:6px; font-style:italic; }
+
+.exlist{ display:flex; flex-direction:column; gap:10px; }
+.exrow{ background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:9px 10px; }
+.exrow-noLog{ display:flex; justify-content:space-between; align-items:center; padding:6px 4px; background:none; border:none; }
+.exrow-top{ display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+.exname{ font-weight:600; font-size:0.94rem; flex:1; min-width:140px; }
+.exreps{ color:var(--booty); font-weight:600; font-size:0.86rem; font-family:'Oswald'; }
+.histbtn{ background:none; border:none; color:var(--text-faint); font-size:0.72rem; text-decoration:underline; cursor:pointer; padding:0; }
+.exrow-bottom{ display:flex; align-items:center; gap:10px; margin-top:8px; flex-wrap:wrap; }
+.weightfield{ display:flex; align-items:center; gap:5px; }
+.weightfield label{ font-family:'Oswald'; font-weight:700; font-size:0.72rem; color:var(--text-faint); background:var(--surface2); border:1px solid var(--border); border-radius:5px; width:20px; height:20px; display:flex; align-items:center; justify-content:center; }
+.wInput{ width:64px; padding:6px 7px; border-radius:6px; border:1px solid var(--border); background:var(--bg); color:var(--text); font-size:0.9rem; }
+.wInput:focus{ outline:2px solid var(--booty); border-color:var(--booty); }
+.lasthint{ font-size:0.72rem; color:var(--text-faint); margin-top:6px; }
+.histpanel{ margin-top:8px; }
+.histtable{ width:100%; border-collapse:collapse; font-size:0.78rem; }
+.histtable th,.histtable td{ text-align:left; padding:3px 6px; border-bottom:1px solid var(--border); color:var(--text-dim); }
+.histtable th{ color:var(--text-faint); font-weight:600; }
+.setstable{ width:100%; border-collapse:collapse; margin-top:8px; }
+.setstable th{ font-family:'Oswald'; font-weight:700; font-size:0.72rem; color:var(--text-faint); text-align:left; padding:2px 6px; }
+.setstable td{ padding:3px 6px; }
+.setlabel{ font-size:0.78rem; color:var(--text-dim); white-space:nowrap; }
+.setstable .wInput{ width:100%; min-width:56px; }
+.loadingnote{ text-align:center; padding:40px 20px; color:var(--text-faint); font-family:'Oswald'; }
+.syncbadge{ margin-top:14px; padding:8px 12px; border-radius:8px; font-size:0.78rem; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.syncok{ background:var(--core-soft); color:var(--core); }
+.syncbad{ background:var(--booty-soft); color:#ff9eb0; }
+.syncbadge button{ background:none; border:1px solid currentColor; color:inherit; border-radius:6px; padding:4px 8px; font-size:0.72rem; cursor:pointer; }
+
+.pickrow{ display:flex; gap:6px; flex-wrap:wrap; }
+.pickbtn{ padding:7px 12px; border-radius:7px; border:1px solid var(--border); background:var(--bg); color:var(--text-dim); font-size:0.82rem; cursor:pointer; }
+.pickbtn.chosen{ background:var(--amber); border-color:var(--amber); color:#241a06; font-weight:600; }
+
+.gridwrap{ margin-top:14px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:12px; overflow-x:auto; }
+.gridtitle{ font-family:'Oswald'; font-weight:600; font-size:0.85rem; color:var(--text-dim); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.05em; }
+.dcgrid{ border-collapse:collapse; width:100%; }
+.dcgrid th{ font-size:0.72rem; color:var(--text-faint); font-weight:600; padding:4px; }
+.dcgrid td{ text-align:center; padding:6px 4px; }
+.wklabel{ font-family:'Oswald'; font-weight:600; color:var(--text-dim); font-size:0.8rem; text-align:left !important; white-space:nowrap; }
+.gridpair{ display:flex; flex-direction:column; gap:3px; align-items:center; }
+.gridlabel{ display:flex; align-items:center; gap:3px; font-size:0.62rem; color:var(--text-faint); font-family:'Oswald'; font-weight:600; cursor:pointer; }
+.gridbox{ width:16px; height:16px; accent-color:var(--core); cursor:pointer; }
+
+.blockswitch{ display:flex; align-items:center; gap:8px; margin-bottom:10px; font-size:0.82rem; color:var(--text-dim); }
+.blockswitch select{ background:var(--surface2); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:5px 8px; font-size:0.82rem; }
+
+@media (max-width:400px){
+  .exname{ min-width:100%; }
+}
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Booty Builder <small>+ Deep Core Tracker</small></div>
+    <nav class="section-toggle">
+      <button data-section="booty" class="active">Booty Builder</button>
+      <button data-section="core">Deep Core</button>
+    </nav>
+  </header>
+  <main id="app"></main>
+<script>
+// ============================================================
+// BOOTY BUILDER PROGRAM DATA (with per-set count for weight entry)
+// log:true items use sets:N to render N weight-entry rows per person
+// ============================================================
+
+const BOOTY = {
+  "weeks": [
+    {
+      "num": 1,
+      "days": [
+        {
+          "day": "Monday",
+          "title": "Lower Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Mins Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "15 x Banded Side Walks (each side)",
+                "15 x Banded Glute Bridge"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_back_squat",
+                  "name": "Barbell Back Squat",
+                  "reps": "3 x 12",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "barbell_hip_thrust",
+                  "name": "Barbell Hip Thrust",
+                  "reps": "3 x 12",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "barbell_walking_lunge",
+                  "name": "Barbell Walking Lunge (Each Side)",
+                  "reps": "3 x 10",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_sl_rdl",
+                  "name": "Dumbbell Single Leg Romanian Deadlift (Each Side)",
+                  "reps": "3 x 10",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "Alternating 8 Min EMOM",
+                "Min 1: 40s Rowing Machine · Min 2: 40s Burpees (repeat each min x4)"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Tuesday",
+          "title": "Upper Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20 x Bird Dogs",
+                "20 x Shoulder Taps",
+                "10 x Hollow Rocks"
+              ],
+              "note": "× 3 Sets, no rest"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "db_strict_press",
+                  "name": "Dumbbell Strict Press",
+                  "reps": "3 x 10",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_bench_press",
+                  "name": "Dumbbell Bench Press",
+                  "reps": "3 x 12",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Push/Shoulders",
+              "lines": [
+                "10–15 x Pushups (or on knees)"
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins",
+              "items": [
+                {
+                  "key": "db_lateral_raise",
+                  "name": "Dumbbell Lateral Raise",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "pickone",
+              "label": "ABS",
+              "note": "× 3 Sets, rest 30s between sets",
+              "options": [
+                "Knee To Chest",
+                "Toes To Bar",
+                "Captain's Chair"
+              ],
+              "key": "abs_pickone",
+              "extraLines": [
+                "10 reps",
+                "20 x Bicycles",
+                "10 x Hollow Rocks"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Wednesday",
+          "title": "Lower Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Mins Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20s Side Plank Leg Hold",
+                "15 x Banded Glute Bridge"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "seated_hip_abduction",
+                  "name": "Seated Hip Abduction",
+                  "reps": "3 x 20",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "bb_bstance_glute_bridge",
+                  "name": "Barbell B-Stance Glute Bridge (Each Side)",
+                  "reps": "3 x 12",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_bulgarian_lunge",
+                  "name": "Dumbbell Bulgarian Lunge (Each Side)",
+                  "reps": "3 x 8",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "plate_sumo_squat",
+                  "name": "Plate Sumo Squat",
+                  "reps": "x 15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "30 x Bodyweight Squats",
+                "20 x Plank Jacks",
+                "10 x Burpees"
+              ],
+              "note": "Repeat 3 times, no rest"
+            }
+          ]
+        },
+        {
+          "day": "Thursday",
+          "title": "Intervals (Optional)",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Note",
+              "lines": [
+                "Optional — only skip if overly sore. It's only 6 x 200m's — YOU'VE GOT THIS."
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "10 Min Slow Run",
+                "Mobility & Drills"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Main Set",
+              "lines": [
+                "6 x 200m Effort"
+              ],
+              "note": "90s rest between reps"
+            },
+            {
+              "type": "ref",
+              "label": "Warm Down",
+              "lines": [
+                "10 Min Slow Run",
+                "Stretch Out"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Friday",
+          "title": "Upper Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20 x Bird Dogs",
+                "15 x Swimmers",
+                "10 x Hollow Rocks"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_bent_over_row",
+                  "name": "Barbell Bent Over Row",
+                  "reps": "3 x 12",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_tricep_extension",
+                  "name": "Dumbbell Tricep Extension",
+                  "reps": "3 x 12",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "lat_pulldown",
+                  "name": "Lat Pulldown",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "rear_delt_fly",
+                  "name": "Rear Delt Fly",
+                  "reps": "20",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "30s Plank Hold",
+                "10 x Plank Jacks",
+                "10 x Alt. V-Snaps (Each Side)"
+              ],
+              "note": "Repeat 3 times, rest 30s between sets"
+            }
+          ]
+        },
+        {
+          "day": "Saturday",
+          "title": "Lower Body Strength 3",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Mins Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "15 x Banded Glute Bridge",
+                "15 x Fire Hydrants (Each Side)"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_sumo_deadlift",
+                  "name": "Barbell Sumo Deadlift",
+                  "reps": "3 x 12",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "barbell_glute_bridge",
+                  "name": "Barbell Glute Bridge (Each Side)",
+                  "reps": "3 x 12",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_step_up",
+                  "name": "Dumbbell Step Up (Each Side)",
+                  "reps": "3 x 10",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "cable_kickback",
+                  "name": "Cable Kick Back (Each Side)",
+                  "reps": "3 x 15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "30s Bike GO HARD / 30s Bike TAKE IT EASY"
+              ],
+              "note": "Repeat 10 times"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "days": [
+        {
+          "day": "Monday",
+          "title": "Lower Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "15 x Banded Side Walks (Each Side)",
+                "15 x Banded Glute Bridge"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 3 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_back_squat",
+                  "name": "Barbell Back Squat",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 3 mins between sets",
+              "items": [
+                {
+                  "key": "barbell_glute_bridge",
+                  "name": "Barbell Glute Bridge",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "kb_sumo_rdl",
+                  "name": "Kettlebell Sumo Romanian Deadlift (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_walking_lunge",
+                  "name": "Barbell Walking Lunge (Each Side)",
+                  "reps": "3 x 10",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "seated_hip_abduction",
+                  "name": "Seated Hip Abduction",
+                  "reps": "3 x 20",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "Alternating 8 Min EMOM",
+                "Min 1: 40s Rowing Machine · Min 2: 40s Burpees (repeat each min x4)"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Tuesday",
+          "title": "Upper Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20 x Bird Dogs",
+                "20 x Shoulder Taps",
+                "10 x Hollow Rocks"
+              ],
+              "note": "× 3 Sets, no rest"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 3 Mins between Sets",
+              "items": [
+                {
+                  "key": "db_strict_press",
+                  "name": "Dumbbell Strict Press",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "db_bench_press",
+                  "name": "Dumbbell Bench Press",
+                  "reps": "3 x 8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Push",
+              "lines": [
+                "10–15 x Pushups (or on knees)"
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins",
+              "items": [
+                {
+                  "key": "db_lateral_raise",
+                  "name": "Dumbbell Lateral Raise",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "ground_to_overhead_plate",
+                  "name": "Ground to Overhead (Plate)",
+                  "reps": "3 x 20",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "pickone",
+              "label": "ABS",
+              "note": "× 3 Sets, rest 30s between sets",
+              "options": [
+                "Knee To Chest",
+                "Toes To Bar",
+                "Captain's Chair"
+              ],
+              "key": "abs_pickone",
+              "extraLines": [
+                "10 reps",
+                "20 x Bicycles",
+                "10 x Hollow Rocks"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Wednesday",
+          "title": "Lower Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20s Side Plank Leg Hold",
+                "15 x Banded Glute Bridge"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 3 Mins between Sets",
+              "items": [
+                {
+                  "key": "banded_barbell_glute_bridge",
+                  "name": "Banded Barbell Glute Bridge",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "db_bulgarian_lunge",
+                  "name": "Dumbbell Bulgarian Lunge (Each Side)",
+                  "reps": "3 x 8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "back_extension_plate",
+                  "name": "Back Extension with Plate",
+                  "reps": "10",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "plate_sumo_squat",
+                  "name": "Plate Sumo Squat",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "cable_kickback",
+                  "name": "Cable Kick Back (Each Side)",
+                  "reps": "3 x 15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "30 x Bodyweight Squats",
+                "20 x Plank Jacks",
+                "10 x Burpees"
+              ],
+              "note": "Repeat 3 times, no rest"
+            }
+          ]
+        },
+        {
+          "day": "Thursday",
+          "title": "Run (Optional)",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Note",
+              "lines": [
+                "Optional — if you're up to it, get out and run. Conversational pace, 3–5km. LET'S GO!!"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Session",
+              "lines": [
+                "Mobility & Drills",
+                "Run 3–5km at conversational pace (try no headphones)",
+                "Stretch out"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Friday",
+          "title": "Upper Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20 x Bird Dogs",
+                "15 x Swimmers",
+                "10 x Hollow Rocks"
+              ],
+              "note": "× 3 Sets, no rest"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 3 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_bent_over_row",
+                  "name": "Barbell Bent Over Row",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "db_tricep_extension",
+                  "name": "Dumbbell Tricep Extension",
+                  "reps": "3 x 8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "lat_pulldown",
+                  "name": "Lat Pulldown",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "rear_delt_fly",
+                  "name": "Rear Delt Fly",
+                  "reps": "20",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "db_renegade_row",
+                  "name": "Dumbbell Renegade Row (Each Side)",
+                  "reps": "3 x 10",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "30s Plank Hold",
+                "10 x Plank Jacks",
+                "10 x Alt. V-Snaps (Each Side)"
+              ],
+              "note": "Repeat 3 times, rest 30s between sets"
+            }
+          ]
+        },
+        {
+          "day": "Saturday",
+          "title": "Lower Body Strength 3",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "15 x Banded Glute Bridge",
+                "15 x Fire Hydrants (Each Side)"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 3 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_sumo_deadlift",
+                  "name": "Barbell Sumo Deadlift",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 3 mins between sets",
+              "items": [
+                {
+                  "key": "bb_bstance_glute_bridge",
+                  "name": "Barbell B-Stance Glute Bridge (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_sl_rdl",
+                  "name": "Dumbbell Single Leg Romanian Deadlift (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "seated_hip_abduction",
+                  "name": "Seated Hip Abduction",
+                  "reps": "3 x 20",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_step_up",
+                  "name": "Dumbbell Step Up (Each Side)",
+                  "reps": "3 x 10",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "30s Bike GO HARD / 30s Bike TAKE IT EASY"
+              ],
+              "note": "Repeat 10 times"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 3,
+      "days": [
+        {
+          "day": "Monday",
+          "title": "Lower Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "15 x Banded Side Walks (Each Side)",
+                "15 x Banded Glute Bridge"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 3 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_back_squat",
+                  "name": "Barbell Back Squat",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 3 mins between sets",
+              "items": [
+                {
+                  "key": "barbell_glute_bridge",
+                  "name": "Barbell Glute Bridge",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "kb_sumo_rdl",
+                  "name": "Kettlebell Sumo Romanian Deadlift (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_walking_lunge",
+                  "name": "Barbell Walking Lunge (Each Side)",
+                  "reps": "3 x 10",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "seated_hip_abduction",
+                  "name": "Seated Hip Abduction",
+                  "reps": "20",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_sl_glute_bridge",
+                  "name": "Single Leg Dumbbell Glute Bridge (Each Side)",
+                  "reps": "10",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "Alternating 8 Min EMOM",
+                "Min 1: 40s Rowing Machine · Min 2: 40s Burpees (repeat each min x4)"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Tuesday",
+          "title": "Upper Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20 x Bird Dogs",
+                "20 x Shoulder Taps",
+                "10 x Hollow Rocks"
+              ],
+              "note": "× 3 Sets, no rest"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 3 Mins between Sets",
+              "items": [
+                {
+                  "key": "db_strict_press",
+                  "name": "Dumbbell Strict Press",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "db_bench_press",
+                  "name": "Dumbbell Bench Press",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Push",
+              "lines": [
+                "10–15 x Pushups (or on knees)"
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins",
+              "items": [
+                {
+                  "key": "db_lateral_raise",
+                  "name": "Dumbbell Lateral Raise",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "ground_to_overhead_plate",
+                  "name": "Ground to Overhead (Plate)",
+                  "reps": "20",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "",
+              "lines": [
+                "10 x Plank Up/Downs"
+              ]
+            },
+            {
+              "type": "pickone",
+              "label": "ABS",
+              "note": "× 3 Sets, rest 30s between sets",
+              "options": [
+                "Knee To Chest",
+                "Toes To Bar",
+                "Captain's Chair"
+              ],
+              "key": "abs_pickone",
+              "extraLines": [
+                "10 reps",
+                "20 x Bicycles",
+                "10 x Hollow Rocks"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Wednesday",
+          "title": "Lower Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20s Side Plank Leg Hold",
+                "15 x Banded Glute Bridge"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 3 Mins between Sets",
+              "items": [
+                {
+                  "key": "banded_barbell_glute_bridge",
+                  "name": "Banded Barbell Glute Bridge",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "db_bulgarian_lunge",
+                  "name": "Dumbbell Bulgarian Lunge (Each Side)",
+                  "reps": "3 x 8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "back_extension_plate",
+                  "name": "Back Extension with Plate",
+                  "reps": "10",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "plate_sumo_squat",
+                  "name": "Plate Sumo Squat",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "cable_kickback",
+                  "name": "Cable Kick Back (Each Side)",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_curtsy_lunge",
+                  "name": "Dumbbell Curtsy Lunge (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "30 x Bodyweight Squats",
+                "20 x Plank Jacks",
+                "10 x Burpees"
+              ],
+              "note": "Repeat 3 times, no rest"
+            }
+          ]
+        },
+        {
+          "day": "Thursday",
+          "title": "Intervals (Optional)",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Note",
+              "lines": [
+                "Optional — only skip if overly sore. It's only 8 x 200m's — YOU'VE GOT THIS."
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "10 Min Slow Run",
+                "Mobility & Drills"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Main Set",
+              "lines": [
+                "8 x 200m Effort"
+              ],
+              "note": "90s rest between reps"
+            },
+            {
+              "type": "ref",
+              "label": "Warm Down",
+              "lines": [
+                "10 Min Slow Run",
+                "Stretch Out"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Friday",
+          "title": "Upper Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20 x Bird Dogs",
+                "15 x Swimmers",
+                "10 x Hollow Rocks"
+              ],
+              "note": "× 3 Sets, no rest"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 3 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_bent_over_row",
+                  "name": "Barbell Bent Over Row",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "db_tricep_extension",
+                  "name": "Dumbbell Tricep Extension",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "lat_pulldown",
+                  "name": "Lat Pulldown",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "rear_delt_fly",
+                  "name": "Rear Delt Fly",
+                  "reps": "20",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "db_renegade_row",
+                  "name": "Dumbbell Renegade Row (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "bicep_hammer_curl",
+                  "name": "Bicep Hammer Curl (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "30s Plank Hold",
+                "10 x Plank Jacks",
+                "10 x Alt. V-Snaps (Each Side)"
+              ],
+              "note": "Repeat 3 times, rest 30s between sets"
+            }
+          ]
+        },
+        {
+          "day": "Saturday",
+          "title": "Lower Body Strength 3",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "15 x Banded Glute Bridge",
+                "15 x Fire Hydrants (Each Side)"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 3 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_sumo_deadlift",
+                  "name": "Barbell Sumo Deadlift",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 3 mins between sets",
+              "items": [
+                {
+                  "key": "bb_bstance_glute_bridge",
+                  "name": "Barbell B-Stance Glute Bridge (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_sl_rdl",
+                  "name": "Dumbbell Single Leg Romanian Deadlift (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "seated_hip_abduction",
+                  "name": "Seated Hip Abduction",
+                  "reps": "3 x 20",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "db_step_up",
+                  "name": "Dumbbell Step Up (Each Side)",
+                  "reps": "10",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "cable_kickback",
+                  "name": "Cable Kick Back (Each Side)",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "30s Bike GO HARD / 30s Bike TAKE IT EASY"
+              ],
+              "note": "Repeat 10 times"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 4,
+      "days": [
+        {
+          "day": "Monday",
+          "title": "Lower Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "15 x Banded Side Walks (Each Side)",
+                "15 x Banded Glute Bridge"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_back_squat",
+                  "name": "Barbell Back Squat",
+                  "reps": "2 x 12",
+                  "log": true,
+                  "sets": 2
+                },
+                {
+                  "key": "barbell_hip_thrust",
+                  "name": "Barbell Hip Thrust",
+                  "reps": "2 x 12",
+                  "log": true,
+                  "sets": 2
+                },
+                {
+                  "key": "barbell_walking_lunge",
+                  "name": "Barbell Walking Lunge (Each Side)",
+                  "reps": "2 x 10",
+                  "log": true,
+                  "sets": 2
+                },
+                {
+                  "key": "db_sl_rdl",
+                  "name": "Dumbbell Single Leg Romanian Deadlift (Each Side)",
+                  "reps": "2 x 10",
+                  "log": true,
+                  "sets": 2
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "Alternating 4 Min EMOM",
+                "Min 1: 40s Rowing Machine · Min 2: 40s Burpees (repeat each min x4)"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Tuesday",
+          "title": "Upper Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20 x Bird Dogs",
+                "20 x Shoulder Taps",
+                "10 x Hollow Rocks"
+              ],
+              "note": "× 3 Sets, no rest"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "db_strict_press",
+                  "name": "Dumbbell Strict Press",
+                  "reps": "2 x 12",
+                  "log": true,
+                  "sets": 2
+                },
+                {
+                  "key": "db_bench_press",
+                  "name": "Dumbbell Bench Press",
+                  "reps": "2 x 12",
+                  "log": true,
+                  "sets": 2
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Push",
+              "lines": [
+                "10–15 x Pushups (or on knees)"
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 2 Sets, rest 2 mins",
+              "items": [
+                {
+                  "key": "db_lateral_raise",
+                  "name": "Dumbbell Lateral Raise",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 2
+                }
+              ]
+            },
+            {
+              "type": "pickone",
+              "label": "ABS",
+              "note": "× 2 Sets, rest 30s between sets",
+              "options": [
+                "Knee To Chest",
+                "Toes To Bar",
+                "Captain's Chair"
+              ],
+              "key": "abs_pickone",
+              "extraLines": [
+                "10 reps",
+                "20 x Bicycles",
+                "10 x Hollow Rocks"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Wednesday",
+          "title": "Lower Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20s Side Plank Leg Hold",
+                "15 x Banded Glute Bridge"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "seated_hip_abduction",
+                  "name": "Seated Hip Abduction",
+                  "reps": "2 x 20",
+                  "log": true,
+                  "sets": 2
+                },
+                {
+                  "key": "bb_bstance_glute_bridge",
+                  "name": "Barbell B-Stance Glute Bridge (Each Side)",
+                  "reps": "2 x 12",
+                  "log": true,
+                  "sets": 2
+                },
+                {
+                  "key": "db_bulgarian_lunge",
+                  "name": "Dumbbell Bulgarian Lunge (Each Side)",
+                  "reps": "2 x 8",
+                  "log": true,
+                  "sets": 2
+                },
+                {
+                  "key": "plate_sumo_squat",
+                  "name": "Plate Sumo Squat",
+                  "reps": "2 x 15",
+                  "log": true,
+                  "sets": 2
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Note",
+              "lines": [
+                "NO BURNER THIS WEEK!!"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Thursday",
+          "title": "Run (Optional)",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Note",
+              "lines": [
+                "Optional — if you're up to it, get out and run. Conversational pace, 3–5km. LET'S GO!!"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Session",
+              "lines": [
+                "Mobility & Drills",
+                "Run 3–5km at conversational pace (try no headphones)",
+                "Stretch out"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Friday",
+          "title": "Upper Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20 x Bird Dogs",
+                "15 x Swimmers",
+                "10 x Hollow Rocks"
+              ],
+              "note": "× 3 Sets, no rest"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_bent_over_row",
+                  "name": "Barbell Bent Over Row",
+                  "reps": "2 x 12",
+                  "log": true,
+                  "sets": 2
+                },
+                {
+                  "key": "db_tricep_extension",
+                  "name": "Dumbbell Tricep Extension",
+                  "reps": "2 x 12",
+                  "log": true,
+                  "sets": 2
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 2 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "lat_pulldown",
+                  "name": "Lat Pulldown",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 2
+                },
+                {
+                  "key": "rear_delt_fly",
+                  "name": "Rear Delt Fly",
+                  "reps": "20",
+                  "log": true,
+                  "sets": 2
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "30s Plank Hold",
+                "10 x Plank Jacks",
+                "10 x Alt. V-Snaps (Each Side)"
+              ],
+              "note": "Repeat 2 times, rest 30s between sets"
+            }
+          ]
+        },
+        {
+          "day": "Saturday",
+          "title": "Lower Body Strength 3",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "15 x Banded Glute Bridge",
+                "15 x Fire Hydrants (Each Side)"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lifts",
+              "note": "Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_sumo_deadlift",
+                  "name": "Barbell Sumo Deadlift",
+                  "reps": "2 x 12",
+                  "log": true,
+                  "sets": 2
+                },
+                {
+                  "key": "barbell_glute_bridge",
+                  "name": "Barbell Glute Bridge (Each Side)",
+                  "reps": "2 x 12",
+                  "log": true,
+                  "sets": 2
+                },
+                {
+                  "key": "db_step_up",
+                  "name": "Dumbbell Step Up (Each Side)",
+                  "reps": "2 x 10",
+                  "log": true,
+                  "sets": 2
+                },
+                {
+                  "key": "cable_kickback",
+                  "name": "Cable Kick Back (Each Side)",
+                  "reps": "2 x 15",
+                  "log": true,
+                  "sets": 2
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "30s Bike GO HARD / 30s Bike TAKE IT EASY"
+              ],
+              "note": "Repeat 6 times"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 5,
+      "days": [
+        {
+          "day": "Monday",
+          "title": "Lower Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "15 x Banded Side Walks (Each Side)",
+                "15 x Banded Glute Bridge",
+                "15 x Fire Hydrants (Each Side)"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pyramid — increase weight each set · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_back_squat",
+                  "name": "Barbell Back Squat",
+                  "reps": "15,12,10,8,6",
+                  "log": true,
+                  "sets": 5
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins between sets (hold glute bridge 2s at top)",
+              "items": [
+                {
+                  "key": "barbell_glute_bridge",
+                  "name": "Barbell Glute Bridge",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "kb_sumo_rdl",
+                  "name": "Kettlebell Sumo Romanian Deadlift (Each Side)",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Drop Set 1",
+              "note": "Challenging → moderate → bodyweight, no rest between drops · × 3 sets, rest 2 mins",
+              "items": [
+                {
+                  "key": "db_walking_lunge",
+                  "name": "Dumbbell Walking Lunge",
+                  "reps": "10",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Drop Set 2",
+              "note": "Challenging → moderate → light, no rest between drops · × 3 sets, rest 2 mins",
+              "items": [
+                {
+                  "key": "seated_hip_abduction",
+                  "name": "Seated Hip Abduction",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "Run 300m",
+                "10 x Burpees",
+                "15 x Plank Jacks"
+              ],
+              "note": "Repeat 3 times, rest 30s between sets"
+            }
+          ]
+        },
+        {
+          "day": "Tuesday",
+          "title": "Upper Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "10 x Deadbugs (Each Side)",
+                "10 x Slow Mountain Climbers (Each Side)",
+                "20 x Toe Touches"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pyramid — increase weight each set · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "db_push_press",
+                  "name": "Dumbbell Push Press",
+                  "reps": "15,12,10,8,6",
+                  "log": true,
+                  "sets": 5
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "straight into flies · × 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "barbell_bench_press",
+                  "name": "Barbell Bench Press",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_flies",
+                  "name": "Dumbbell Flies",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 90s between sets",
+              "items": [
+                {
+                  "key": "plate_front_raise",
+                  "name": "Plate Weight Front Raise",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "",
+              "lines": [
+                "20 x Pike Toe Touches"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Eccentric Loading",
+              "lines": [
+                "3 x 15 Pushups (option on knees) — slow down 3s, power up 1s"
+              ],
+              "note": "Rest 90s between sets"
+            },
+            {
+              "type": "ref",
+              "label": "ABS",
+              "lines": [
+                "50 x Heel Taps",
+                "40 x Toe Touches",
+                "30s Plank",
+                "20 x Alt. V-Snaps (Each Side)",
+                "10 x Hollow Rocks"
+              ],
+              "note": "× 2 Sets, rest 90s between sets"
+            }
+          ]
+        },
+        {
+          "day": "Wednesday",
+          "title": "Lower Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20s Side Plank Leg Hold",
+                "15 x Banded Glute Bridge",
+                "15 x Clamshells (Each Side)"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pulse up 3s / out 3s · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "banded_barbell_glute_bridge",
+                  "name": "Banded Barbell Glute Bridge",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Tempo: down 2s, hold 1s, up 1s · Rest 90s between sets",
+              "items": [
+                {
+                  "key": "db_bulgarian_lunge",
+                  "name": "Dumbbell Bulgarian Lunge (Each Side)",
+                  "reps": "3 x 8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Curtsy lunge: 1 pulse at bottom · × 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "cable_kickback",
+                  "name": "Cable Kick Back (Each Side)",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_curtsy_lunge",
+                  "name": "Dumbbell Curtsy Lunge (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Straight into 15 reps bodyweight · × 3 Sets, rest 90s between sets",
+              "items": [
+                {
+                  "key": "back_extension_plate",
+                  "name": "Back Extension with Plate",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "10 Cals Rower",
+                "20 x Shoulder Taps",
+                "20 x Alt. V-Snaps (Each Side)"
+              ],
+              "note": "Repeat 3 times, no rest"
+            }
+          ]
+        },
+        {
+          "day": "Thursday",
+          "title": "Intervals (Optional)",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Note",
+              "lines": [
+                "I want you to get these done today — YOU'VE GOT THIS."
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "10 Min Slow Run",
+                "Mobility & Drills"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Main Set",
+              "lines": [
+                "10 x 200m Effort"
+              ],
+              "note": "90s rest between reps"
+            },
+            {
+              "type": "ref",
+              "label": "Warm Down",
+              "lines": [
+                "10 Min Slow Run",
+                "Stretch Out"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Friday",
+          "title": "Upper Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "10 x Deadbugs (Each Side)",
+                "15 x Scap Pulls",
+                "20 x Toe Touches"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pyramid (as written: 5,12,10,8,6 — likely meant 15,12,10,8,6, matching weeks 6–8. Check with your program) · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "pullup_banded",
+                  "name": "Pull-Up (Banded Option)",
+                  "reps": "15,12,10,8,6",
+                  "log": true,
+                  "sets": 5
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "seated_row",
+                  "name": "Seated Row",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "cable_face_pull",
+                  "name": "Cable Face Pull",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "pickone",
+              "label": "",
+              "note": "then 12 x Dumbbell Curl & Press · × 3 Sets, rest 2 mins between sets",
+              "options": [
+                "Dips",
+                "Box Dips"
+              ],
+              "key": "dips_pickone",
+              "extraLines": [
+                "8 (Dips) or 20 (Box Dips) reps"
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "",
+              "items": [
+                {
+                  "key": "db_curl_press",
+                  "name": "Dumbbell Curl & Press",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Drop Set",
+              "note": "Drop weight a few kg, complete 8 more reps · × 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "db_single_arm_row",
+                  "name": "Dumbbell Single Arm Row",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "pickone",
+              "label": "ABS",
+              "note": "Alternating 6 Min EMOM — 14 x Dumbbell Renegade Row (Each Side), 14 x pick below, 14 x Russian Twists (Each Side)",
+              "options": [
+                "Toes To Bar",
+                "Knee To Chest",
+                "Captain's Chair"
+              ],
+              "key": "abs_pickone"
+            }
+          ]
+        },
+        {
+          "day": "Saturday",
+          "title": "Lower Body Strength 3",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20s Side Plank Leg Hold",
+                "15 x Fire Hydrants (Each Side)",
+                "15 x Banded Glute Bridge"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pyramid — increase weight each set · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "deficit_bb_sumo_deadlift",
+                  "name": "Deficit Barbell Sumo Deadlift",
+                  "reps": "10,8,8,6,6",
+                  "log": true,
+                  "sets": 5
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Tempo: 2s down, 1s up, 1s hold · × 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "bb_bstance_glute_bridge",
+                  "name": "Barbell B-Stance Glute Bridge (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_sl_rdl",
+                  "name": "Dumbbell Single Leg Romanian Deadlift (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Drop Set",
+              "note": "Challenging → moderate → light, no rest between drops · × 3 sets, rest 2 mins",
+              "items": [
+                {
+                  "key": "seated_hip_abduction",
+                  "name": "Seated Hip Abduction",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Push up fast 1s, slow down 3s · × 3 Sets, rest 90s between sets",
+              "items": [
+                {
+                  "key": "db_step_up",
+                  "name": "Dumbbell Step Up (Each Side)",
+                  "reps": "10",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "10 Rounds on Treadmill: 45s Hard Run / 45s Easy Run"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 6,
+      "days": [
+        {
+          "day": "Monday",
+          "title": "Lower Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "15 x Banded Side Walks (Each Side)",
+                "15 x Banded Glute Bridge",
+                "15 x Fire Hydrants (Each Side)"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pyramid — increase weight each set · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "barbell_back_squat",
+                  "name": "Barbell Back Squat",
+                  "reps": "15,12,10,8,6",
+                  "log": true,
+                  "sets": 5
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 4 Sets, rest 2 mins between sets (hold glute bridge 2s at top)",
+              "items": [
+                {
+                  "key": "barbell_glute_bridge",
+                  "name": "Barbell Glute Bridge",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "kb_sumo_rdl",
+                  "name": "Kettlebell Sumo Romanian Deadlift (Each Side)",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Drop Set 1",
+              "note": "Challenging → moderate → bodyweight, no rest between drops · × 3 sets, rest 2 mins",
+              "items": [
+                {
+                  "key": "db_walking_lunge",
+                  "name": "Dumbbell Walking Lunge",
+                  "reps": "10",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Drop Set 2",
+              "note": "Challenging → moderate → light, no rest between drops · × 3 sets, rest 2 mins",
+              "items": [
+                {
+                  "key": "seated_hip_abduction",
+                  "name": "Seated Hip Abduction",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "Run 300m",
+                "10 x Burpees",
+                "15 x Plank Jacks"
+              ],
+              "note": "Repeat 3 times"
+            }
+          ]
+        },
+        {
+          "day": "Tuesday",
+          "title": "Upper Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "10 x Deadbugs (Each Side)",
+                "10 x Slow Mountain Climbers (Each Side)",
+                "20 x Toe Touches"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pyramid — increase weight each set · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "db_push_press",
+                  "name": "Dumbbell Push Press",
+                  "reps": "15,12,10,8,6",
+                  "log": true,
+                  "sets": 5
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "straight into flies · × 4 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "barbell_bench_press",
+                  "name": "Barbell Bench Press",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "db_flies",
+                  "name": "Dumbbell Flies",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 90s between sets",
+              "items": [
+                {
+                  "key": "plate_front_raise",
+                  "name": "Plate Weight Front Raise",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "",
+              "lines": [
+                "20 x Pike Toe Touches"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Eccentric Loading",
+              "lines": [
+                "3 x 15 Pushups (option on knees) — slow down 3s, power up 1s"
+              ],
+              "note": "Rest 90s between sets"
+            },
+            {
+              "type": "ref",
+              "label": "ABS",
+              "lines": [
+                "50 x Heel Taps",
+                "40 x Toe Touches",
+                "30s Plank",
+                "20 x Alt. V-Snaps (Each Side)",
+                "10 x Hollow Rocks"
+              ],
+              "note": "× 2 Sets, rest 90s between sets"
+            }
+          ]
+        },
+        {
+          "day": "Wednesday",
+          "title": "Lower Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20s Side Plank Leg Hold",
+                "15 x Banded Glute Bridge",
+                "15 x Clamshells (Each Side)"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pulse up 3s / out 3s · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "banded_barbell_glute_bridge",
+                  "name": "Banded Barbell Glute Bridge",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Tempo: down 2s, hold 1s, up 1s · Rest 90s between sets",
+              "items": [
+                {
+                  "key": "db_bulgarian_lunge",
+                  "name": "Dumbbell Bulgarian Lunge (Each Side)",
+                  "reps": "4 x 8",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Curtsy lunge: 1 pulse at bottom · × 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "cable_kickback",
+                  "name": "Cable Kick Back (Each Side)",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_curtsy_lunge",
+                  "name": "Dumbbell Curtsy Lunge (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Straight into 15 reps bodyweight · × 3 Sets, rest 90s between sets",
+              "items": [
+                {
+                  "key": "back_extension_plate",
+                  "name": "Back Extension with Plate",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "10 Cals Rower",
+                "20 x Shoulder Taps",
+                "20 x Alt. V-Snaps (Each Side)"
+              ],
+              "note": "Repeat 3 times, no rest"
+            }
+          ]
+        },
+        {
+          "day": "Thursday",
+          "title": "Run (Optional)",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Note",
+              "lines": [
+                "Optional — if you're up to it, get out and run. Conversational pace, 3–8km. LET'S GO!!"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Session",
+              "lines": [
+                "Mobility & Drills",
+                "Run 3–8km at conversational pace (try no headphones)",
+                "Stretch out"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Friday",
+          "title": "Upper Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "10 x Deadbugs (Each Side)",
+                "15 x Scap Pulls",
+                "20 x Toe Touches"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pyramid — increase weight each set · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "pullup_banded",
+                  "name": "Pull-Up (Banded Option)",
+                  "reps": "15,12,10,8,6",
+                  "log": true,
+                  "sets": 5
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 4 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "seated_row",
+                  "name": "Seated Row",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "cable_face_pull",
+                  "name": "Cable Face Pull",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "pickone",
+              "label": "",
+              "note": "then 12 x Dumbbell Curl & Press · × 3 Sets, rest 2 mins between sets",
+              "options": [
+                "Dips",
+                "Box Dips"
+              ],
+              "key": "dips_pickone",
+              "extraLines": [
+                "8 (Dips) or 20 (Box Dips) reps"
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "",
+              "items": [
+                {
+                  "key": "db_curl_press",
+                  "name": "Dumbbell Curl & Press",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Drop Set",
+              "note": "Drop weight a few kg, complete 8 more reps · × 3 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "db_single_arm_row",
+                  "name": "Dumbbell Single Arm Row",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "pickone",
+              "label": "ABS",
+              "note": "Alternating 6 Min EMOM — 14 x Dumbbell Renegade Row (Each Side), 14 x pick below, 14 x Russian Twists (Each Side)",
+              "options": [
+                "Toes To Bar",
+                "Knee To Chest",
+                "Captain's Chair"
+              ],
+              "key": "abs_pickone"
+            }
+          ]
+        },
+        {
+          "day": "Saturday",
+          "title": "Lower Body Strength 3",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20s Side Plank Leg Hold",
+                "15 x Fire Hydrants (Each Side)",
+                "15 x Banded Glute Bridge"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pyramid — increase weight each set · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "deficit_bb_sumo_deadlift",
+                  "name": "Deficit Barbell Sumo Deadlift",
+                  "reps": "10,8,8,6,6",
+                  "log": true,
+                  "sets": 5
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Tempo: 2s down, 1s up, 1s hold · × 4 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "bb_bstance_glute_bridge",
+                  "name": "Barbell B-Stance Glute Bridge (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "db_sl_rdl",
+                  "name": "Dumbbell Single Leg Romanian Deadlift (Each Side)",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Drop Set",
+              "note": "Challenging → moderate → light, no rest between drops · × 3 sets, rest 2 mins",
+              "items": [
+                {
+                  "key": "seated_hip_abduction",
+                  "name": "Seated Hip Abduction",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Push up fast 1s, slow down 3s · × 3 Sets, rest 90s between sets",
+              "items": [
+                {
+                  "key": "db_step_up",
+                  "name": "Dumbbell Step Up (Each Side)",
+                  "reps": "10",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "10 Rounds on Treadmill: 45s Hard Run / 45s Easy Run"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 7,
+      "days": [
+        {
+          "day": "Monday",
+          "title": "Lower Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "15 x Banded Side Walks (Each Side)",
+                "15 x Banded Glute Bridge",
+                "15 x Fire Hydrants"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Drop Set",
+              "note": "Challenging → moderate → light, no rest between drops · × 4 sets, rest 2 mins",
+              "items": [
+                {
+                  "key": "seated_hip_abduction",
+                  "name": "Seated Hip Abduction",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pulse 1 at the bottom of squat · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "smith_back_squat",
+                  "name": "Smith Machine Back Squat",
+                  "reps": "4 x 15",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Eccentric Loading",
+              "note": "Down 3s, hold 1s, up 1s · × 4 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "barbell_glute_bridge",
+                  "name": "Barbell Glute Bridge",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "kb_sumo_rdl",
+                  "name": "Kettlebell Sumo Romanian Deadlift (Each Side)",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Rest 90s between sets",
+              "items": [
+                {
+                  "key": "db_walking_lunge",
+                  "name": "Dumbbell Walking Lunge (15 Each Side)",
+                  "reps": "3 x 30",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "8 Min Alternating EMOM",
+                "20–30 x Jump Lunges",
+                "20–30 x Kettlebell Swings (glute-focused)"
+              ],
+              "note": "Whatever reps you hit minute 1, match every minute after"
+            }
+          ]
+        },
+        {
+          "day": "Tuesday",
+          "title": "Upper Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "10 x Deadbugs (Each Side)",
+                "10 x Slow Mountain Climbers (Each Side)",
+                "20 x Toe Touches"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pyramid — increase weight each set · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "db_push_press",
+                  "name": "Dumbbell Push Press",
+                  "reps": "15,12,10,8,6",
+                  "log": true,
+                  "sets": 5
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "straight into flies · × 4 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "barbell_bench_press",
+                  "name": "Barbell Bench Press",
+                  "reps": "8",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "db_flies",
+                  "name": "Dumbbell Flies",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 90s between sets",
+              "items": [
+                {
+                  "key": "db_lateral_raise",
+                  "name": "Dumbbell Lateral Raise",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_front_raise",
+                  "name": "Dumbbell Front Raise",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Eccentric Loading",
+              "lines": [
+                "3 x 15 Pushups (option on knees) — slow down 3s, power up 1s"
+              ],
+              "note": "Rest 90s between sets"
+            },
+            {
+              "type": "ref",
+              "label": "ABS",
+              "lines": [
+                "50 x Heel Taps",
+                "40 x Toe Touches",
+                "30s Plank",
+                "20 x Alt. V-Snaps (Each Side)",
+                "10 x Hollow Rocks"
+              ],
+              "note": "× 3 Sets, rest 90s between sets"
+            }
+          ]
+        },
+        {
+          "day": "Wednesday",
+          "title": "Lower Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20s Side Plank Leg Hold",
+                "15 x Banded Glute Bridge",
+                "15 x Clamshells"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Straight into 5 reps with 3s holds at top · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "banded_barbell_glute_bridge",
+                  "name": "Banded Barbell Glute Bridge",
+                  "reps": "4 x 15",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Pulse 1 at the bottom of lunge · Rest 90s between sets",
+              "items": [
+                {
+                  "key": "db_bulgarian_lunge",
+                  "name": "Dumbbell Bulgarian Lunge (Each Side)",
+                  "reps": "4 x 12",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Eccentric Loading",
+              "note": "Kickback up 1s hold 1s down 3s · Curtsy lunge power up, slow down · × 3 Sets, rest 90s between sets",
+              "items": [
+                {
+                  "key": "cable_kickback",
+                  "name": "Cable Kick Back (Each Side)",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_curtsy_lunge",
+                  "name": "Dumbbell Curtsy Lunge (Each Side)",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Slow down 3s, fast up 1s · Rest 90s between sets",
+              "items": [
+                {
+                  "key": "back_extension_plate",
+                  "name": "Back Extension with Plate",
+                  "reps": "4 x 20",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "pickone",
+              "label": "Burner",
+              "note": "10 Cals Rower first · rest 1 min, repeat 3 times",
+              "options": [
+                "Box Jumps (10)",
+                "Step Ups (20)"
+              ],
+              "key": "boxjump_pickone"
+            }
+          ]
+        },
+        {
+          "day": "Thursday",
+          "title": "Intervals (Optional)",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Note",
+              "lines": [
+                "Only skip these if overly sore — YOU'VE GOT THIS."
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "10 Min Slow Run",
+                "Mobility & Drills"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Main Set",
+              "lines": [
+                "10 x 200m Effort"
+              ],
+              "note": "90s rest between reps"
+            },
+            {
+              "type": "ref",
+              "label": "Warm Down",
+              "lines": [
+                "10 Min Slow Run",
+                "Stretch Out"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Friday",
+          "title": "Upper Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "10 x Deadbugs (Each Side)",
+                "15 x Scap Pulls",
+                "20 x Toe Touches"
+              ],
+              "note": "× 3 Sets, no rest"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pyramid — increase weight each set · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "pullup_banded",
+                  "name": "Pull-Up (Banded Option)",
+                  "reps": "15,12,10,8,6",
+                  "log": true,
+                  "sets": 5
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Rest 90s between sets",
+              "items": [
+                {
+                  "key": "seated_row",
+                  "name": "Seated Row",
+                  "reps": "4 x 20",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "pickone",
+              "label": "Eccentric Loading",
+              "note": "Slow down 3s, fast up 1s · × 4 Sets, rest 2 mins between sets",
+              "options": [
+                "Dips",
+                "Box Dips"
+              ],
+              "key": "dips_pickone",
+              "extraLines": [
+                "12 (Dips) or 20 (Box Dips) reps"
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Rest 90s between sets",
+              "items": [
+                {
+                  "key": "db_clean_press",
+                  "name": "Dumbbell Clean & Press",
+                  "reps": "4 x 20",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "pickone",
+              "label": "ABS",
+              "note": "Alternating 9 Min EMOM — 14 x Dumbbell Renegade Row (Each Side), 14 x pick below, 14 x Russian Twists (Each Side)",
+              "options": [
+                "Toes To Bar",
+                "Knee To Chest",
+                "Captain's Chair"
+              ],
+              "key": "abs_pickone"
+            }
+          ]
+        },
+        {
+          "day": "Saturday",
+          "title": "Lower Body Strength 3",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20s Side Plank Leg Hold",
+                "15 x Fire Hydrants (Each Side)",
+                "15 x Banded Glute Bridge"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Rest 2 Mins",
+              "items": [
+                {
+                  "key": "deficit_bb_sumo_deadlift",
+                  "name": "Deficit Barbell Sumo Deadlift",
+                  "reps": "4 x 15",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 4 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "bb_bstance_glute_bridge",
+                  "name": "Barbell B-Stance Glute Bridge (Each Side)",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "db_sl_rdl",
+                  "name": "Dumbbell Single Leg Romanian Deadlift (Each Side)",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Drop Set",
+              "note": "Challenging → moderate → light, no rest between drops · × 4 sets, rest 2 mins",
+              "items": [
+                {
+                  "key": "seated_hip_abduction",
+                  "name": "Seated Hip Abduction",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Eccentric Loading",
+              "note": "Slow on way down 3s, power up 1s · Rest 90s between sets",
+              "items": [
+                {
+                  "key": "db_step_up",
+                  "name": "Dumbbell Step Up",
+                  "reps": "3 x 12",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "15 x Bodyweight Box Squat Jumps — jump as high as you can"
+              ],
+              "note": "× 4 Sets, rest 30s between sets"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 8,
+      "days": [
+        {
+          "day": "Monday",
+          "title": "Lower Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "15 x Banded Side Walks (Each Side)",
+                "15 x Banded Glute Bridge",
+                "15 x Fire Hydrants"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Drop Set",
+              "note": "Challenging → moderate → light, no rest between drops · × 4 sets, rest 2 mins",
+              "items": [
+                {
+                  "key": "seated_hip_abduction",
+                  "name": "Seated Hip Abduction",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pulse 1 at the bottom of squat · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "smith_back_squat",
+                  "name": "Smith Machine Back Squat",
+                  "reps": "4 x 20",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "Eccentric Loading",
+              "note": "Down 3s, hold 1s, up 1s · × 4 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "barbell_glute_bridge",
+                  "name": "Barbell Glute Bridge",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "kb_sumo_rdl",
+                  "name": "Kettlebell Sumo Romanian Deadlift (Each Side)",
+                  "reps": "12",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Rest 90s between sets",
+              "items": [
+                {
+                  "key": "db_walking_lunge",
+                  "name": "Dumbbell Walking Lunge (15 Each Side)",
+                  "reps": "4 x 30",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "8 Min Alternating EMOM",
+                "20–30 x Jump Lunges",
+                "20–30 x Kettlebell Swings (glute-focused)"
+              ],
+              "note": "Whatever reps you hit minute 1, match every minute after"
+            }
+          ]
+        },
+        {
+          "day": "Tuesday",
+          "title": "Upper Body Strength 1",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "10 x Deadbugs (Each Side)",
+                "10 x Slow Mountain Climbers (Each Side)",
+                "20 x Toe Touches"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Pyramid — increase weight each set · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "db_push_press",
+                  "name": "Dumbbell Push Press",
+                  "reps": "15,12,10,8,6",
+                  "log": true,
+                  "sets": 5
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "straight into flies · × 4 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "barbell_bench_press",
+                  "name": "Barbell Bench Press",
+                  "reps": "18",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "db_flies",
+                  "name": "Dumbbell Flies",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "× 3 Sets, rest 90s between sets",
+              "items": [
+                {
+                  "key": "db_lateral_raise",
+                  "name": "Dumbbell Lateral Raise",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                },
+                {
+                  "key": "db_front_raise",
+                  "name": "Dumbbell Front Raise",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 3
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Eccentric Loading",
+              "lines": [
+                "3 x 15 Pushups (option on knees) — slow down 3s, power up 1s"
+              ],
+              "note": "Rest 90s between sets"
+            },
+            {
+              "type": "ref",
+              "label": "ABS",
+              "lines": [
+                "50 x Heel Taps",
+                "40 x Toe Touches",
+                "30s Plank",
+                "20 x Alt. V-Snaps (Each Side)",
+                "10 x Hollow Rocks"
+              ],
+              "note": "× 3 Sets, rest 90s between sets"
+            }
+          ]
+        },
+        {
+          "day": "Wednesday",
+          "title": "Run (Optional)",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Note",
+              "lines": [
+                "Optional — pick your distance before you start, then commit to it. 3–8km. LET'S GO!!"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Session",
+              "lines": [
+                "Mobility & Drills",
+                "Run 3–8km at conversational pace (try no headphones)",
+                "Stretch out"
+              ]
+            }
+          ]
+        },
+        {
+          "day": "Thursday",
+          "title": "Lower Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Warm Up",
+              "lines": [
+                "5 Min Walk or Bike"
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "20s Side Plank Leg Hold",
+                "15 x Banded Glute Bridge",
+                "15 x Clamshells (Each Side)"
+              ],
+              "note": "× 3 Sets, no rest between sets"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Straight into 5 reps with 3s holds at top · Rest 2 Mins between Sets",
+              "items": [
+                {
+                  "key": "banded_barbell_glute_bridge",
+                  "name": "Banded Barbell Glute Bridge",
+                  "reps": "4 x 20",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Rest 2 Mins",
+              "items": [
+                {
+                  "key": "deficit_bb_sumo_deadlift",
+                  "name": "Deficit Barbell Sumo Deadlift",
+                  "reps": "4 x 20",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Step up 1s up, 3s down · × 4 Sets, rest 2 mins between sets",
+              "items": [
+                {
+                  "key": "db_step_up",
+                  "name": "Dumbbell Step Up (Each Side)",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 4
+                },
+                {
+                  "key": "cable_kickback",
+                  "name": "Cable Kick Back (Each Side)",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Glute bridge straight into 30s hold · Back ext slow down 3s, fast up 1s · × 4 Sets, rest 90s between sets",
+              "items": [
+                {
+                  "key": "bw_banded_glute_bridge",
+                  "name": "Bodyweight Banded Glute Bridge",
+                  "reps": "15",
+                  "log": false
+                },
+                {
+                  "key": "back_extension_plate",
+                  "name": "Back Extension with Plate",
+                  "reps": "15",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "ref",
+              "label": "Burner",
+              "lines": [
+                "Run fast 45s / rest 45s"
+              ],
+              "note": "× 8 Rounds, no rest"
+            }
+          ]
+        },
+        {
+          "day": "Friday",
+          "title": "Upper Body Strength 2",
+          "sections": [
+            {
+              "type": "ref",
+              "label": "Activation",
+              "lines": [
+                "10 x Deadbugs (Each Side)",
+                "15 x Scap Pulls",
+                "20 x Toe Touches"
+              ],
+              "note": "× 3 Sets, no rest"
+            },
+            {
+              "type": "main",
+              "label": "Main Lift",
+              "note": "Rest 90s between sets",
+              "items": [
+                {
+                  "key": "pullup_banded",
+                  "name": "Pull-Up (Banded Option)",
+                  "reps": "4 x 15",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Rest 90s between sets",
+              "items": [
+                {
+                  "key": "seated_row",
+                  "name": "Seated Row",
+                  "reps": "4 x 20",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "pickone",
+              "label": "Eccentric Loading",
+              "note": "Slow down 3s, fast up 1s · × 4 Sets, rest 2 mins between sets",
+              "options": [
+                "Dips",
+                "Box Dips"
+              ],
+              "key": "dips_pickone",
+              "extraLines": [
+                "12 (Dips) or 20 (Box Dips) reps"
+              ]
+            },
+            {
+              "type": "main",
+              "label": "",
+              "note": "Rest 90s between sets",
+              "items": [
+                {
+                  "key": "db_clean_press",
+                  "name": "Dumbbell Clean & Press",
+                  "reps": "4 x 20",
+                  "log": true,
+                  "sets": 4
+                }
+              ]
+            },
+            {
+              "type": "pickone",
+              "label": "ABS",
+              "note": "Alternating 12 Min EMOM — 14 x Dumbbell Renegade Row (Each Side), 14 x pick below, 14 x Russian Twists (Each Side)",
+              "options": [
+                "Toes To Bar",
+                "Knee To Chest",
+                "Captain's Chair"
+              ],
+              "key": "abs_pickone"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+// ============================================================
+// DEEP CORE PROGRAM DATA
+// Phase 1 & 2: single fixed daily routine
+// Phase 3 & 4: session-type blocks (mapped to weekday, switchable)
+// ============================================================
+
+const DEEPCORE = {
+  weekdayDefault: { // maps day-of-week -> default block key for phases 3 & 4
+    Mon:"lower", Tue:"upper", Wed:"lower", Thu:"running", Fri:"upper", Sat:"lower", Sun:"lower"
+  },
+  phases: [
+    {
+      key:"p1", name:"Phase 1 — Awareness", weeks:4, mode:"fixed",
+      blocks:{
+        fixed: [
+          {label:"Mobility", note:"× 2 Rounds", items:[
+            "A1. 5 x Supine Pelvic Rock","A2. 5 x Cat & Cow","A3. 5 x Side Lying T-Spine (each side)"
+          ]},
+          {label:"Activation", note:"× 2 Rounds", items:[
+            "B1. 60s Hip Flexor Stretch (each side)","B2. 60s Pigeon Stretch (each side)","B3. 30s Plank (on knees)"
+          ]},
+          {label:"Movement Block 1", note:"× 2 Rounds", items:[
+            "C1. 20s Prone Overhead Extension","C2. 5 x Single Leg Raise / Deadbug (each side)","C3. 10 x Double Leg Glute Bridge"
+          ]},
+          {label:"Movement Block 2", note:"× 2 Rounds", items:[
+            "D1. 10 x Basic Hip Hinge","D2. 30s Side Plank on knees or feet (each side)","D3. 15 x Side Lying Clam"
+          ]}
+        ]
+      }
+    },
+    {
+      key:"p2", name:"Phase 2 — Isolate", weeks:4, mode:"fixed",
+      blocks:{
+        fixed: [
+          {label:"Mobility", note:"× 3 Rounds", items:[
+            "A1. 10 x Supine Pelvic Rock","A2. 10 x Cat & Cow","A3. 10 x Side Lying T-Spine (each side)"
+          ]},
+          {label:"Activation", note:"× 3 Rounds", items:[
+            "B1. 60s Hip Flexor Stretch (each side)","B2. 60s Pigeon Stretch on Bench (each side)","B3. 10 x Plank + Reach on Knees (each side)"
+          ]},
+          {label:"Functional Movement Block 1", note:"× 3 Rounds", items:[
+            "C1. 30s Seated Overhead Iso Hold","C2. 10 x Single Leg Raise / Deadbug (each side)","C3. 10 x Single Leg Bridge (each side)"
+          ]},
+          {label:"Functional Movement Block 2", note:"× 3 Rounds", items:[
+            "D1. 10 x Hip Hinge","D2. 45s Side Plank on feet (each side)","D3. 20 x Hip External Rotation: Side Lying Leg Rotation"
+          ]}
+        ]
+      }
+    },
+    {
+      key:"p3", name:"Phase 3 — Implement", weeks:4, mode:"bytype",
+      blocks:{
+        upper: {label:"Upper Body — Warm Up / Prehab", note:"× 2 Rounds, then complete your upper body workout", items:[
+          "A1. 10 x Side Lying Thoracic Rotation (each side)","A2. 10 x Cat & Cow","A3. 30s Prone Overhead Hold","A4. 30s Seated Overhead Iso Hold","A5. 30 x Seated Banded Row"
+        ]},
+        lower: {label:"Lower Body — Warm Up / Prehab", note:"× 2 Rounds, then complete your lower body workout", items:[
+          "A1. 60s Pigeon Stretch on Bench (each side)","A2. 10 x Supine Pelvic Tucks","A3. 15 x Side Lying Leg Rotation (each side)","A4. 15 x Single Leg Glute Bridge (each side)","A5. 10 x Single Leg Hip Hinge (each side)"
+        ]},
+        running: {label:"Running Session — Warm Up / Prehab", note:"× 2 Rounds, then complete your running session", items:[
+          "A1. 10 x Wall Hostages","A2. 10 x Hip ROM (each side)","A3. 30s Side Plank on feet (each side)","A4. 10 x Single Leg Hip Hinge (each side)","A5. 10 x Static Lunges (each side)"
+        ]},
+        conditioning: {label:"Conditioning Session — Warm Up / Prehab", note:"× 2 Rounds, then complete your workout", items:[
+          "A1. 10 x Side Lying Thoracic Rotation (each side)","A2. 5 x 5s Hip Flexor Stretch Iso (each side)","A3. 30s Prone Overhead Hold","A4. 30 x Seated Banded Row","A5. 10 x Basic Hinge Pattern"
+        ]},
+        full: {label:"Full Workout", note:"Block A × 2 Rounds · Block B × 3 Rounds · Block C × 3 Rounds", items:[
+          "Block A — A1. 10 x Side Lying Thoracic Rotation (each side)","Block A — A2. 60s Pancake Stretch","Block A — A3. 10 x Single Leg Hip Hinge",
+          "Block B — B1. 10 x Back Squat","Block B — B2. 10 x Assisted Chin Up","Block B — B3. 10 x Plank & Reach (on knees)",
+          "Block C — C1. 12 x Bulgarian Split Squat (each side)","Block C — C2. 15 x Side Lying Toe Taps (each side)","Block C — C3. 30s Prone Overhead Hold","Block C — C4. 30 x Seated Banded Row"
+        ]}
+      }
+    },
+    {
+      key:"p4", name:"Phase 4 — Integrate", weeks:4, mode:"bytype",
+      blocks:{
+        upper: {label:"Upper Body — Warm Up / Prehab", note:"Block A × 2 Rounds · Block B × 2 Rounds, then complete your upper body workout", items:[
+          "Block A — A1. 10 x Side Lying Thoracic Rotation (each side)","Block A — A2. 15 x Seated Banded Row","Block A — A3. 15 x Seated Banded Scap Slide","Block A — A4. 10 x Assisted Chin Up",
+          "Block B — B1. 10 x Cat & Cow","Block B — B2. 60s Hip Flexor Stretch (each side)"
+        ]},
+        lower: {label:"Lower Body — Warm Up / Prehab", note:"Block A × 2 Rounds · Block B × 2 Rounds, then complete your lower body workout", items:[
+          "Block A — A1. 15 x Side Lying Clam (each side)","Block A — A2. 15 x Side Lying Leg Rotation (each side)","Block A — A3. 10 x Single Leg Hip Hinge (each side)","Block A — A4. 10 x Bulgarian Split Squat (each side)",
+          "Block B — B1. 60s Pigeon Stretch (each side)","Block B — B2. 60s Pancake Stretch"
+        ]},
+        running: {label:"Running Session — Warm Up / Prehab", note:"Block A × 2 Rounds · Block B × 2 Rounds, then complete your running session", items:[
+          "Block A — A1. 10 x Supine Pelvic Rock","Block A — A2. 10 x Hip Flexor Stretch (each side)","Block A — A3. 5 x Hip ROM (each side)","Block A — A4. 10 x Wall Hostages",
+          "Block B — B1. 60s Pigeon Stretch (each side)","Block B — B2. 60s Hip Flexor Stretch (each side)"
+        ]},
+        conditioning: {label:"Conditioning Session — Warm Up / Prehab", note:"Block A × 2 Rounds · Block B × 2 Rounds, then complete your conditioning session", items:[
+          "Block A — A1. 10 x Cat + Cow","Block A — A2. 30s Prone Overhead Extension","Block A — A3. 10 x Static Lunges (each side)","Block A — A4. 10 x Plank & Reach on feet",
+          "Block B — B1. 10 x Pancake Stretch","Block B — B2. 10 x Side Lying Leg Rotation (each side)"
+        ]}
+      }
+    }
+  ]
+};
+
+// ============================================================
+// APP LOGIC — Supabase-synced version
+// ============================================================
+
+const SUPABASE_URL = "https://lqyczipgwitvvdldpfcm.supabase.co";
+const SUPABASE_KEY = "sb_publishable_NW4meAW_l_w9N0k0S3VrPw_pNkkJQKV";
+const SB_HEADERS = { apikey: SUPABASE_KEY, Authorization: "Bearer " + SUPABASE_KEY, "Content-Type": "application/json" };
+
+const DAY_ORDER = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const DAY_FULL = {Mon:"Monday",Tue:"Tuesday",Wed:"Wednesday",Thu:"Thursday",Fri:"Friday",Sat:"Saturday",Sun:"Sunday"};
+
+let state = {
+  section: "booty",
+  bootyWeek: 1,
+  bootyDay: "Monday",
+  corePhase: "p1",
+  coreWeek: 1,
+  coreDay: "Mon"
+};
+
+// in-memory mirror of the database, hydrated on load and kept current locally
+let cache = { weights:{}, picks:{}, dayDone:{}, coreGrid:{}, blockOv:{} };
+let dataReady = false;
+let syncFailed = false;
+
+// ---------- Supabase REST helpers ----------
+async function sbFetchAll(table){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=*`, { headers: SB_HEADERS });
+  if(!res.ok) throw new Error("fetch failed: "+table);
+  return await res.json();
+}
+async function sbUpsert(table, row){
+  try{
+    await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+      method: "POST",
+      headers: { ...SB_HEADERS, Prefer: "resolution=merge-duplicates,return=minimal" },
+      body: JSON.stringify([row])
+    });
+  }catch(e){ console.error("sbUpsert failed", table, row, e); }
+}
+
+// debounce writes per unique field so fast typing doesn't spam requests
+const debounceTimers = {};
+function debouncedWrite(id, fn, delay){
+  clearTimeout(debounceTimers[id]);
+  debounceTimers[id] = setTimeout(fn, delay || 400);
+}
+
+function numOrNull(v){
+  if(v === "" || v === null || v === undefined) return null;
+  const n = parseFloat(v);
+  return isNaN(n) ? null : n;
+}
+
+// ---------- load all data from Supabase into the local cache ----------
+async function loadAllData(){
+  try{
+    const [weights, picks, dayDone, coreGrid, blockOv] = await Promise.all([
+      sbFetchAll("booty_weights"), sbFetchAll("booty_picks"), sbFetchAll("booty_day_done"),
+      sbFetchAll("core_grid"), sbFetchAll("core_block_override")
+    ]);
+    const c = { weights:{}, picks:{}, dayDone:{}, coreGrid:{}, blockOv:{} };
+    weights.forEach(r=>{
+      c.weights[r.exercise_key] = c.weights[r.exercise_key] || {};
+      const wk = c.weights[r.exercise_key][r.week] = c.weights[r.exercise_key][r.week] || {C:[], M:[]};
+      wk.C[r.set_idx] = r.c_weight != null ? String(r.c_weight) : "";
+      wk.M[r.set_idx] = r.m_weight != null ? String(r.m_weight) : "";
+    });
+    picks.forEach(r=> c.picks[r.pick_key] = r.value);
+    dayDone.forEach(r=> c.dayDone[r.week+"_"+r.day] = r.done);
+    coreGrid.forEach(r=>{
+      c.coreGrid[r.phase_key] = c.coreGrid[r.phase_key] || {};
+      c.coreGrid[r.phase_key][r.week+"_"+r.day] = {C:r.c_done, M:r.m_done};
+    });
+    blockOv.forEach(r=> c.blockOv[r.phase_key+"_"+r.week+"_"+r.day] = r.block_key);
+    cache = c;
+    syncFailed = false;
+
+    // one-off migration: push any pre-existing localStorage data up, only if
+    // the database looks empty and this device has old local entries
+    const isEmpty = weights.length===0 && picks.length===0 && dayDone.length===0 && coreGrid.length===0 && blockOv.length===0;
+    if(isEmpty && !localStorage.getItem("migrated_to_supabase")){
+      await migrateLegacyLocalStorage();
+    }
+    localStorage.setItem("supabase_cache_backup", JSON.stringify(cache));
+  }catch(e){
+    console.error("loadAllData failed, falling back to last known cache", e);
+    syncFailed = true;
+    const backup = lsGet("supabase_cache_backup");
+    if(backup) cache = backup;
+  }
+  dataReady = true;
+}
+
+async function migrateLegacyLocalStorage(){
+  const jobs = [];
+  Object.keys(localStorage).forEach(k=>{
+    if(k.startsWith("w_")){
+      const key = k.slice(2);
+      const hist = lsGet(k) || {};
+      Object.keys(hist).forEach(week=>{
+        const rec = hist[week];
+        const nSets = Math.max((rec.C||[]).length, (rec.M||[]).length);
+        for(let i=0;i<nSets;i++){
+          const cw = numOrNull((rec.C||[])[i]);
+          const mw = numOrNull((rec.M||[])[i]);
+          if(cw!==null || mw!==null){
+            jobs.push(sbUpsert("booty_weights", {exercise_key:key, week:parseInt(week,10), set_idx:i, c_weight:cw, m_weight:mw}));
+            cache.weights[key] = cache.weights[key] || {};
+            cache.weights[key][week] = cache.weights[key][week] || {C:[],M:[]};
+            cache.weights[key][week].C[i] = (rec.C||[])[i] || "";
+            cache.weights[key][week].M[i] = (rec.M||[])[i] || "";
+          }
+        }
+      });
+    } else if(k.startsWith("p_")){
+      const pickKey = k.slice(2);
+      const val = localStorage.getItem(k);
+      if(val){ jobs.push(sbUpsert("booty_picks", {pick_key:pickKey, value:val})); cache.picks[pickKey] = val; }
+    } else if(k.startsWith("d_")){
+      const parts = k.slice(2).split("_");
+      const week = parseInt(parts[0],10), day = parts.slice(1).join("_");
+      const done = localStorage.getItem(k) === "1";
+      jobs.push(sbUpsert("booty_day_done", {week, day, done}));
+      cache.dayDone[week+"_"+day] = done;
+    } else if(k.startsWith("core_grid_")){
+      const phaseKey = k.slice("core_grid_".length);
+      const grid = lsGet(k) || {};
+      Object.keys(grid).forEach(wd=>{
+        const week = wd.split("_")[0], day = wd.split("_").slice(1).join("_");
+        const cell = grid[wd] || {};
+        jobs.push(sbUpsert("core_grid", {phase_key:phaseKey, week:parseInt(week,10), day, c_done:!!cell.C, m_done:!!cell.M}));
+        cache.coreGrid[phaseKey] = cache.coreGrid[phaseKey] || {};
+        cache.coreGrid[phaseKey][wd] = {C:!!cell.C, M:!!cell.M};
+      });
+    } else if(k.startsWith("core_block_")){
+      const rest = k.slice("core_block_".length);
+      const parts = rest.split("_");
+      const phaseKey = parts[0], week = parseInt(parts[1],10), day = parts.slice(2).join("_");
+      const blockKey = localStorage.getItem(k);
+      if(blockKey){ jobs.push(sbUpsert("core_block_override", {phase_key:phaseKey, week, day, block_key:blockKey})); cache.blockOv[phaseKey+"_"+week+"_"+day] = blockKey; }
+    }
+  });
+  await Promise.all(jobs);
+  localStorage.setItem("migrated_to_supabase", "1");
+}
+
+function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+
+// ---------- accessors used by render functions (all synchronous, read from cache) ----------
+function getExHistory(key){ return cache.weights[key] || {}; }
+function setExValue(key, week, field, setIdx, val){
+  cache.weights[key] = cache.weights[key] || {};
+  cache.weights[key][week] = cache.weights[key][week] || {C:[], M:[]};
+  cache.weights[key][week][field][setIdx] = val;
+  const rec = cache.weights[key][week];
+  debouncedWrite("w_"+key+"_"+week+"_"+setIdx, ()=>{
+    sbUpsert("booty_weights", {
+      exercise_key:key, week:parseInt(week,10), set_idx:setIdx,
+      c_weight:numOrNull(rec.C[setIdx]), m_weight:numOrNull(rec.M[setIdx])
+    });
+    localStorage.setItem("supabase_cache_backup", JSON.stringify(cache));
+  });
+}
+function getLastBefore(key, week){
+  const h = getExHistory(key);
+  let bestWeek = -1, best = null;
+  Object.keys(h).forEach(w=>{
+    const wn = parseInt(w,10);
+    const rec = h[w];
+    const hasAny = (rec.C||[]).some(v=>v) || (rec.M||[]).some(v=>v);
+    if(wn < week && wn > bestWeek && hasAny){ bestWeek = wn; best = rec; }
+  });
+  return bestWeek > -1 ? {week:bestWeek, ...best} : null;
+}
+
+function getPick(key){ return cache.picks[key] || ""; }
+function setPick(key, val){
+  cache.picks[key] = val;
+  debouncedWrite("p_"+key, ()=> sbUpsert("booty_picks", {pick_key:key, value:val}), 50);
+}
+
+function getDayDone(week, day){ return !!cache.dayDone[week+"_"+day]; }
+function setDayDone(week, day, val){
+  cache.dayDone[week+"_"+day] = val;
+  sbUpsert("booty_day_done", {week:parseInt(week,10), day, done:val});
+}
+
+function getCoreGrid(phaseKey){ return cache.coreGrid[phaseKey] || {}; }
+function setCoreGridCell(phaseKey, week, day, field, val){
+  cache.coreGrid[phaseKey] = cache.coreGrid[phaseKey] || {};
+  const cell = cache.coreGrid[phaseKey][week+"_"+day] = cache.coreGrid[phaseKey][week+"_"+day] || {C:false, M:false};
+  cell[field] = val;
+  sbUpsert("core_grid", {phase_key:phaseKey, week:parseInt(week,10), day, c_done:cell.C, m_done:cell.M});
+}
+function getCoreBlockOverride(phaseKey, week, day){ return cache.blockOv[phaseKey+"_"+week+"_"+day] || ""; }
+function setCoreBlockOverride(phaseKey, week, day, val){
+  cache.blockOv[phaseKey+"_"+week+"_"+day] = val;
+  sbUpsert("core_block_override", {phase_key:phaseKey, week:parseInt(week,10), day, block_key:val});
+}
+
+// ---------- render: top-level ----------
+function render(){
+  document.querySelectorAll(".section-toggle button").forEach(b=>{
+    b.classList.toggle("active", b.dataset.section === state.section);
+  });
+  const app = document.getElementById("app");
+  if(!dataReady){ app.innerHTML = `<div class="loadingnote">Loading your data…</div>`; return; }
+  app.innerHTML = (state.section === "booty" ? renderBooty() : renderCore()) + renderSyncBadge();
+  attachHandlers();
+  window.scrollTo({top:0});
+}
+
+function renderSyncBadge(){
+  return syncFailed
+    ? `<div class="syncbadge syncbad">⚠ Couldn't reach the shared database — showing your last saved copy. Changes will be local only until this reconnects. <button id="refreshBtn">⟳ Retry</button></div>`
+    : `<div class="syncbadge syncok">Synced with gym buddy ✓ <button id="refreshBtn">⟳ Refresh</button></div>`;
+}
+
+// ============================================================
+// BOOTY BUILDER
+// ============================================================
+function renderBooty(){
+  const week = BOOTY.weeks.find(w=>w.num===state.bootyWeek);
+  const availableDays = week.days.map(d=>d.day);
+  if(!availableDays.includes(state.bootyDay)) state.bootyDay = availableDays[0];
+  const day = week.days.find(d=>d.day===state.bootyDay);
+
+  let html = `<div class="pillrow" id="weekPills">`;
+  BOOTY.weeks.forEach(w=>{
+    html += `<button class="pill ${w.num===state.bootyWeek?'active booty':''}" data-week="${w.num}">W${w.num}</button>`;
+  });
+  html += `</div>`;
+
+  html += `<div class="pillrow daypills" id="dayPills">`;
+  week.days.forEach(d=>{
+    html += `<button class="pill daypill ${d.day===state.bootyDay?'active booty':''}" data-day="${d.day}">${d.day.slice(0,3)}</button>`;
+  });
+  html += `</div>`;
+
+  const done = getDayDone(state.bootyWeek, state.bootyDay);
+  html += `<div class="daycard">
+    <div class="dayhead">
+      <div>
+        <div class="daytitle">${day.day} — Week ${state.bootyWeek}</div>
+        <div class="daysubtitle">${day.title}</div>
+      </div>
+      <label class="donetoggle">
+        <input type="checkbox" id="dayDoneBox" ${done?"checked":""}/>
+        <span>Session done</span>
+      </label>
+    </div>`;
+
+  day.sections.forEach((sec, si)=>{
+    html += renderSection(sec, si, state.bootyWeek, state.bootyDay);
+  });
+
+  html += `</div>`;
+  return html;
+}
+
+function renderSection(sec, si, week, day){
+  let cls = "seccard sec-" + sec.type;
+  let html = `<div class="${cls}">`;
+  if(sec.label) html += `<div class="seclabel">${sec.label}</div>`;
+
+  if(sec.type === "ref"){
+    html += `<ul class="reflist">`;
+    sec.lines.forEach(l=> html += `<li>${l}</li>`);
+    html += `</ul>`;
+    if(sec.note) html += `<div class="secnote">${sec.note}</div>`;
+  }
+
+  if(sec.type === "main"){
+    html += `<div class="exlist">`;
+    sec.items.forEach(it=>{
+      html += renderExerciseRow(it, week);
+    });
+    html += `</div>`;
+    if(sec.note) html += `<div class="secnote">${sec.note}</div>`;
+  }
+
+  if(sec.type === "pickone"){
+    const pickKey = sec.key + "_w" + week + "_" + day;
+    const current = getPick(pickKey);
+    html += `<div class="pickrow" data-pickkey="${pickKey}">`;
+    sec.options.forEach(opt=>{
+      html += `<button class="pickbtn ${current===opt?'chosen':''}" data-opt="${opt}">${opt}</button>`;
+    });
+    html += `</div>`;
+    if(sec.extraLines) html += `<div class="secnote">${sec.extraLines.join(" · ")}</div>`;
+    if(sec.note) html += `<div class="secnote">${sec.note}</div>`;
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+function renderExerciseRow(it, week){
+  if(!it.log){
+    return `<div class="exrow exrow-noLog">
+      <div class="exname">${it.name}</div>
+      <div class="exreps">${it.reps}</div>
+    </div>`;
+  }
+  const nSets = it.sets || 1;
+  const hist = getExHistory(it.key);
+  const cur = hist[week] || {C:[], M:[]};
+  const last = getLastBefore(it.key, week);
+
+  const histWeeks = Object.keys(hist).map(w=>parseInt(w,10))
+    .filter(w=> (hist[w].C||[]).some(v=>v) || (hist[w].M||[]).some(v=>v))
+    .sort((a,b)=>a-b);
+  let historyTable = "";
+  if(histWeeks.length){
+    historyTable = `<table class="histtable"><tr><th>Wk</th><th>C</th><th>M</th></tr>` +
+      histWeeks.map(w=>{
+        const c = (hist[w].C||[]).map(v=>v||'–').join(', ');
+        const m = (hist[w].M||[]).map(v=>v||'–').join(', ');
+        return `<tr><td>${w}</td><td>${c}</td><td>${m}</td></tr>`;
+      }).join("") +
+      `</table>`;
+  }
+
+  let setsRows = "";
+  for(let i=0; i<nSets; i++){
+    const lastC = last && last.C && last.C[i] ? last.C[i] : "";
+    const lastM = last && last.M && last.M[i] ? last.M[i] : "";
+    const curC = (cur.C||[])[i] || "";
+    const curM = (cur.M||[])[i] || "";
+    setsRows += `<tr>
+      <td class="setlabel">Set ${i+1}</td>
+      <td><input type="number" step="0.5" inputmode="decimal" class="wInput" data-field="C" data-setidx="${i}" value="${curC}" placeholder="${lastC?lastC+'kg':'kg'}"/></td>
+      <td><input type="number" step="0.5" inputmode="decimal" class="wInput" data-field="M" data-setidx="${i}" value="${curM}" placeholder="${lastM?lastM+'kg':'kg'}"/></td>
+    </tr>`;
+  }
+
+  const lastStr = last ? `Last time (Wk ${last.week}): C ${(last.C||[]).map(v=>v||'–').join('/')}kg · M ${(last.M||[]).map(v=>v||'–').join('/')}kg` : `First time logging this`;
+
+  return `<div class="exrow" data-key="${it.key}" data-week="${week}">
+    <div class="exrow-top">
+      <div class="exname">${it.name}</div>
+      <div class="exreps">${it.reps}</div>
+      <button class="histbtn" title="View history">History</button>
+    </div>
+    <table class="setstable">
+      <thead><tr><th></th><th>C</th><th>M</th></tr></thead>
+      <tbody>${setsRows}</tbody>
+    </table>
+    <div class="lasthint">${lastStr}</div>
+    <div class="histpanel" style="display:none;">${historyTable || '<div class="secnote">No history yet</div>'}</div>
+  </div>`;
+}
+
+// ============================================================
+// DEEP CORE
+// ============================================================
+function renderCore(){
+  const phase = DEEPCORE.phases.find(p=>p.key===state.corePhase);
+
+  let html = `<div class="pillrow" id="phasePills">`;
+  DEEPCORE.phases.forEach(p=>{
+    html += `<button class="pill ${p.key===state.corePhase?'active core':''}" data-phase="${p.key}">${p.name.split('—')[0].trim()}</button>`;
+  });
+  html += `</div>`;
+  html += `<div class="phasefullname">${phase.name} <span class="secnote">· 4 weeks</span></div>`;
+
+  if(phase.mode === "fixed"){
+    html += `<div class="daycard">`;
+    phase.blocks.fixed.forEach(b=>{
+      html += `<div class="seccard sec-ref">
+        <div class="seclabel">${b.label}</div>
+        <ul class="reflist">${b.items.map(i=>`<li>${i}</li>`).join("")}</ul>
+        ${b.note?`<div class="secnote">${b.note}</div>`:""}
+      </div>`;
+    });
+    html += `</div>`;
+    html += renderFixedGrid(phase);
+  } else {
+    html += renderByTypeNav(phase);
+  }
+
+  return html;
+}
+
+function renderFixedGrid(phase){
+  const grid = getCoreGrid(phase.key);
+  let html = `<div class="gridwrap"><div class="gridtitle">Daily tick-off — 4 weeks <span class="secnote">(C = your tick, M = gym buddy)</span></div><table class="dcgrid"><thead><tr><th></th>`;
+  DAY_ORDER.forEach(d=> html += `<th>${d}</th>`);
+  html += `</tr></thead><tbody>`;
+  for(let w=1; w<=4; w++){
+    html += `<tr><td class="wklabel">Wk ${w}</td>`;
+    DAY_ORDER.forEach(d=>{
+      const cell = grid[w+"_"+d] || {};
+      html += `<td><div class="gridpair">
+        <label class="gridlabel">C<input type="checkbox" class="gridbox" data-phase="${phase.key}" data-week="${w}" data-day="${d}" data-field="C" ${cell.C?"checked":""}/></label>
+        <label class="gridlabel">M<input type="checkbox" class="gridbox" data-phase="${phase.key}" data-week="${w}" data-day="${d}" data-field="M" ${cell.M?"checked":""}/></label>
+      </div></td>`;
+    });
+    html += `</tr>`;
+  }
+  html += `</tbody></table></div>`;
+  return html;
+}
+
+function renderByTypeNav(phase){
+  let html = `<div class="pillrow" id="coreWeekPills">`;
+  for(let w=1; w<=4; w++){
+    html += `<button class="pill ${w===state.coreWeek?'active core':''}" data-coreweek="${w}">Wk ${w}</button>`;
+  }
+  html += `</div>`;
+
+  html += `<div class="pillrow daypills" id="coreDayPills">`;
+  DAY_ORDER.forEach(d=>{
+    html += `<button class="pill daypill ${d===state.coreDay?'active core':''}" data-coreday="${d}">${d}</button>`;
+  });
+  html += `</div>`;
+
+  const defaultBlock = DEEPCORE.weekdayDefault[state.coreDay] || "lower";
+  const override = getCoreBlockOverride(phase.key, state.coreWeek, state.coreDay);
+  const activeBlockKey = override || defaultBlock;
+  const block = phase.blocks[activeBlockKey];
+  const isRestDay = state.coreDay === "Sun";
+  const cell = getCoreGrid(phase.key)[state.coreWeek+"_"+state.coreDay] || {};
+
+  html += `<div class="daycard">
+    <div class="dayhead">
+      <div>
+        <div class="daytitle">${DAY_FULL[state.coreDay]} — Week ${state.coreWeek}${isRestDay?' <span class="secnote">(rest day — optional)</span>':''}</div>
+        <div class="daysubtitle">${block.label}</div>
+      </div>
+      <div class="donepair">
+        <label class="donetoggle"><input type="checkbox" id="coreDoneC" ${cell.C?"checked":""}/><span>C</span></label>
+        <label class="donetoggle"><input type="checkbox" id="coreDoneM" ${cell.M?"checked":""}/><span>M</span></label>
+      </div>
+    </div>
+    <div class="blockswitch">
+      <label>Block:</label>
+      <select id="blockOverride">
+        ${Object.keys(phase.blocks).map(k=>`<option value="${k}" ${k===activeBlockKey?"selected":""}>${phase.blocks[k].label}</option>`).join("")}
+      </select>
+    </div>
+    <div class="seccard sec-ref">
+      <ul class="reflist">${block.items.map(i=>`<li>${i}</li>`).join("")}</ul>
+      ${block.note?`<div class="secnote">${block.note}</div>`:""}
+    </div>
+  </div>`;
+
+  return html;
+}
+
+// ============================================================
+// EVENT HANDLERS
+// ============================================================
+function attachHandlers(){
+  document.querySelectorAll("#weekPills .pill").forEach(b=>{
+    b.onclick = ()=>{ state.bootyWeek = parseInt(b.dataset.week,10); render(); };
+  });
+  document.querySelectorAll("#dayPills .pill").forEach(b=>{
+    b.onclick = ()=>{ state.bootyDay = b.dataset.day; render(); };
+  });
+  const dayDoneBox = document.getElementById("dayDoneBox");
+  if(dayDoneBox) dayDoneBox.onchange = ()=> setDayDone(state.bootyWeek, state.bootyDay, dayDoneBox.checked);
+
+  document.querySelectorAll(".wInput").forEach(inp=>{
+    inp.oninput = ()=>{
+      const row = inp.closest(".exrow");
+      setExValue(row.dataset.key, parseInt(row.dataset.week,10), inp.dataset.field, parseInt(inp.dataset.setidx,10), inp.value);
+    };
+  });
+  document.querySelectorAll(".histbtn").forEach(btn=>{
+    btn.onclick = ()=>{
+      const panel = btn.closest(".exrow").querySelector(".histpanel");
+      panel.style.display = panel.style.display === "none" ? "block" : "none";
+    };
+  });
+  document.querySelectorAll(".pickrow .pickbtn").forEach(btn=>{
+    btn.onclick = ()=>{
+      const row = btn.closest(".pickrow");
+      const key = row.dataset.pickkey;
+      setPick(key, btn.dataset.opt);
+      render();
+    };
+  });
+
+  // Core
+  document.querySelectorAll("#phasePills .pill").forEach(b=>{
+    b.onclick = ()=>{ state.corePhase = b.dataset.phase; state.coreWeek = 1; state.coreDay = "Mon"; render(); };
+  });
+  document.querySelectorAll(".gridbox").forEach(cb=>{
+    cb.onchange = ()=> setCoreGridCell(cb.dataset.phase, cb.dataset.week, cb.dataset.day, cb.dataset.field, cb.checked);
+  });
+  document.querySelectorAll("#coreWeekPills .pill").forEach(b=>{
+    b.onclick = ()=>{ state.coreWeek = parseInt(b.dataset.coreweek,10); render(); };
+  });
+  document.querySelectorAll("#coreDayPills .pill").forEach(b=>{
+    b.onclick = ()=>{ state.coreDay = b.dataset.coreday; render(); };
+  });
+  const coreDoneC = document.getElementById("coreDoneC");
+  if(coreDoneC) coreDoneC.onchange = ()=> setCoreGridCell(state.corePhase, state.coreWeek, state.coreDay, "C", coreDoneC.checked);
+  const coreDoneM = document.getElementById("coreDoneM");
+  if(coreDoneM) coreDoneM.onchange = ()=> setCoreGridCell(state.corePhase, state.coreWeek, state.coreDay, "M", coreDoneM.checked);
+  const blockOverride = document.getElementById("blockOverride");
+  if(blockOverride) blockOverride.onchange = ()=>{
+    setCoreBlockOverride(state.corePhase, state.coreWeek, state.coreDay, blockOverride.value);
+    render();
+  };
+  const refreshBtn = document.getElementById("refreshBtn");
+  if(refreshBtn) refreshBtn.onclick = async ()=>{ refreshBtn.textContent = "⟳ …"; await loadAllData(); render(); };
+}
+
+document.querySelectorAll(".section-toggle button").forEach(b=>{
+  b.onclick = ()=>{ state.section = b.dataset.section; render(); };
+});
+
+// initial load, then periodic + focus-triggered re-sync so both phones stay current
+(async ()=>{
+  render(); // shows loading state
+  await loadAllData();
+  render();
+})();
+
+document.addEventListener("visibilitychange", async ()=>{
+  if(document.visibilityState === "visible"){ await loadAllData(); render(); }
+});
+</script>
+</body>
+</html>
