@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Booty Builder &amp; Deep Core Tracker</title>
+<title>Booty Builder, Deep Core &amp; Swim Tracker</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
 
@@ -126,6 +126,63 @@ h1,h2,h3,.daytitle,.phasefullname,.brand,.pill{ font-family:'Oswald',system-ui,s
 .blockswitch{ display:flex; align-items:center; gap:8px; margin-bottom:10px; font-size:0.82rem; color:var(--text-dim); }
 .blockswitch select{ background:var(--surface2); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:5px 8px; font-size:0.82rem; }
 
+
+.restpill{ opacity:0.55; }
+.sec-optional{ border-left-style:dashed; opacity:0.92; }
+.section-toggle{ gap:6px; }
+.section-toggle button{ padding:10px 4px; font-size:0.84rem; }
+.section-toggle button.active[data-section="drills"]{ background:var(--amber); border-color:var(--amber); color:#241a06; }
+.drillgroup{ font-family:'Oswald'; font-weight:600; font-size:0.8rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-faint); margin:16px 2px 6px; }
+.drillcard{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:8px; }
+.drillcard summary{ list-style:none; cursor:pointer; padding:12px 14px; display:flex; flex-direction:column; gap:2px; }
+.drillcard summary::-webkit-details-marker{ display:none; }
+.drillcard summary::after{ content:"+"; position:absolute; right:30px; color:var(--text-faint); font-size:1.1rem; }
+.drillcard[open] summary::after{ content:"–"; }
+.drillcard summary{ position:relative; padding-right:36px; }
+.drillcard summary::after{ right:14px; top:10px; }
+.drillname{ font-weight:600; font-size:0.96rem; color:var(--text); }
+.drillwhere{ font-size:0.74rem; color:var(--swim); }
+.drillbody{ padding:0 14px 12px; font-size:0.87rem; line-height:1.55; color:var(--text-dim); border-top:1px solid var(--border); }
+.drillbody p{ margin:8px 0; }
+.drillbody ol{ margin:4px 0 8px; padding-left:20px; }
+.drillbody li{ margin-bottom:3px; }
+.drillh{ font-family:'Oswald'; font-weight:600; font-size:0.74rem; letter-spacing:0.05em; text-transform:uppercase; color:var(--amber); margin-top:10px; }
+.mynote{ font-size:0.8rem; color:var(--amber); background:#2a2114; border-radius:6px; padding:6px 9px; margin-bottom:8px; line-height:1.45; }
+/* ---------- Swim ---------- */
+:root{ --swim:#3a8fd6; --swim-soft:#16283a; }
+.section-toggle button.active[data-section="swim"]{ background:var(--swim); border-color:var(--swim); color:#fff; }
+.pill.active.swim{ background:var(--swim); border-color:var(--swim); color:#fff; }
+.pilldate{ font-family:'Inter'; font-weight:400; font-size:0.7rem; opacity:0.75; margin-left:3px; }
+.weekhead{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:12px 14px; margin-top:6px; }
+.weekfocus{ margin-top:8px; font-size:0.86rem; color:var(--text); }
+.bbline{ margin-top:8px; font-size:0.8rem; color:var(--text-dim); background:var(--booty-soft); border-radius:6px; padding:6px 8px; line-height:1.4; }
+.tpline{ margin-top:8px; font-size:0.84rem; color:var(--text-dim); }
+.tpline b{ color:var(--swim); }
+.swimcard{ margin-top:10px; }
+.eventcard{ border-color:var(--amber); }
+.sec-swim{ border-left-color:var(--swim); }
+.swimsetlabel{ font-weight:600; font-size:0.92rem; }
+.thenTxt{ font-weight:400; color:var(--text-dim); }
+.swimdetail{ font-size:0.82rem; color:var(--text-dim); margin-top:4px; line-height:1.45; }
+.swimtable td:first-child{ width:42%; }
+.target{ font-size:0.7rem; color:var(--swim); margin-top:1px; }
+.opt{ font-size:0.62rem; color:var(--text-faint); border:1px solid var(--border); border-radius:4px; padding:0 3px; }
+.tInput:focus{ outline:2px solid var(--swim); border-color:var(--swim); }
+.thisavg{ color:var(--swim); }
+.lasthint.tiny{ font-size:0.66rem; opacity:0.7; }
+.fieldrow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
+.fieldbox{ display:flex; flex-direction:column; gap:4px; font-size:0.72rem; color:var(--text-faint); flex:1; min-width:110px; }
+.fieldbox.wide{ flex-basis:100%; }
+.fieldbox .wInput{ width:100%; }
+.swimNote{ width:100%; margin-top:8px; min-height:42px; background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:7px 8px; font-family:'Inter'; font-size:0.84rem; resize:vertical; }
+.bigtp{ font-family:'Oswald'; font-size:2.4rem; font-weight:700; color:var(--swim); margin-top:6px; }
+.bigtp span{ font-size:1rem; color:var(--text-dim); margin-left:4px; }
+.eventrow{ display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-size:0.9rem; }
+.evright{ font-family:'Oswald'; color:var(--swim); }
+.drilllist dt{ font-weight:600; font-size:0.92rem; margin-top:10px; color:var(--swim); }
+.drilllist dd{ margin:3px 0 0; font-size:0.85rem; color:var(--text-dim); line-height:1.5; }
+.daycard + .daycard{ margin-top:10px; }
+
 @media (max-width:400px){
   .exname{ min-width:100%; }
 }
@@ -133,10 +190,12 @@ h1,h2,h3,.daytitle,.phasefullname,.brand,.pill{ font-family:'Oswald',system-ui,s
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">Booty Builder <small>+ Deep Core Tracker</small></div>
+    <div class="brand">Booty Builder <small>+ Deep Core + Swim Tracker</small></div>
     <nav class="section-toggle">
       <button data-section="booty" class="active">Booty Builder</button>
       <button data-section="core">Deep Core</button>
+      <button data-section="swim">Swim</button>
+      <button data-section="drills">Drills</button>
     </nav>
   </header>
   <main id="app"></main>
@@ -3890,6 +3949,689 @@ const DEEPCORE = {
 };
 
 // ============================================================
+// SWIM PROGRAM — Tri 8-week swim plan (Oct–Dec) then Busselton Jetty Swim plan (Dec–Feb)
+// Data is stored in the existing booty_picks table under keys starting "swim|"
+// ============================================================
+
+const SWIM_EVENTS = [
+  {date:"2026-11-21", name:"Ocean swim", dist:"1.25km", key:"ev_nov"},
+  {date:"2027-01-10", name:"Ocean swim", dist:"2.5km", key:"ev_jan"},
+  {date:"2027-02-14", name:"Busselton Jetty Swim", dist:"3.6km", key:"ev_busso"}
+];
+
+// ---- set builders ----
+// tp(n, d, off, then, nMax): n reps of d metres at Test Pace + off sec/100m
+function tp(n, d, off, then, nMax){
+  const offTxt = off===0 ? "@ Test Pace" : (off>0 ? `@ ${off}s slower than TP` : `@ ${-off}s faster than TP`);
+  const countTxt = nMax ? `${n}–${nMax}` : `${n}`;
+  return { label: `${countTxt} × ${d}m ${offTxt}`, then, log:{type:"reps", n:(nMax||n), nMin:(nMax?n:null), d, off}, setKey:`tp${d}@${off}` };
+}
+function txt(label, detail){ return { label, detail }; }
+function reps(label, n, d, setKey, detail, nMin){ return { label, detail, log:{type:"reps", n, d, nMin:nMin||null}, setKey }; }
+function owLog(label, detail, setKey){ return { label, detail, log:{type:"fields", fields:[{k:"time",label:"Time",kind:"time"},{k:"dist",label:"Distance (m)",kind:"num"}]}, setKey }; }
+
+const TEST_SET = { label:"Swim test — 5 × 200m, 30s rest", detail:"Olympic/70.3 test. Swim each 200 hard but even. Your average 200 ÷ 2 = your Test Pace (TP) per 100m.", log:{type:"reps", n:5, d:200, test:true}, setKey:"test5x200" };
+const TRI_NOTE = "Warm up 5–8 mins (easy → vigorous) and cool down 3–5 mins easy + stretch. Rest 40–60s between sets unless stated.";
+
+const TRI_A = { // the plan's Monday swim
+  1:[TEST_SET],
+  2:[tp(1,350,10,"then 100m pull"), tp(1,350,10,"then 100m kick"), tp(1,350,10,"then 100m catch-up")],
+  3:[tp(1,400,10,"then 100m pull"), tp(1,400,10,"then 100m kick"), tp(1,400,10,"then 100m catch-up")],
+  4:[TEST_SET],
+  5:[tp(3,200,5,"100m pull"), tp(3,150,5,"100m kick"), tp(3,100,5,"100m catch-up")],
+  6:[tp(3,300,5,"100m pull"), tp(3,200,5,"100m kick"), tp(3,100,5,"100m catch-up")],
+  7:[tp(2,400,5,"100m pull"), tp(2,300,5,"100m kick"), tp(2,200,5,"100m catch-up")],
+  8:[TEST_SET]
+};
+const EASY150 = txt("150m easy");
+const TRI_B = { // the plan's Wednesday swim
+  1:[tp(1,300,10,"then 100m pull"), tp(1,300,10,"then 100m kick"), tp(1,300,10,"then 100m catch-up")],
+  2:[tp(1,300,5), tp(3,100,0), tp(6,50,-5), EASY150, tp(1,300,5), tp(3,100,0), tp(6,50,-5)],
+  3:[tp(1,300,5), tp(2,150,0), tp(6,50,-5), EASY150, tp(1,300,5), tp(2,150,0), tp(6,50,-5)],
+  4:[tp(1,300,5), tp(3,100,0), tp(8,50,-5), EASY150, tp(1,300,5), tp(3,100,0), tp(8,50,-5)],
+  5:[tp(3,200,-3,null,5), txt("200m recovery pull"), tp(6,100,-3,null,8)],
+  6:[tp(5,100,-5,"100m recovery pull",6), tp(3,200,0,"100m recovery pull"), tp(5,100,-3,null,6)],
+  7:[tp(3,200,-3,null,5), txt("200m recovery pull"), tp(6,100,-5,null,8)],
+  8:[tp(5,100,-5,"100m recovery pull",6), tp(3,200,0,"100m recovery pull"), tp(5,100,-3,null,6)]
+};
+
+// Drill day for the tri block: technique sets borrowed from the Busselton program
+const DRILL_WU = txt("Warm up 300m easy");
+const DRILL_CD = txt("Cool down 200m easy");
+const TRI_DRILL = {
+  1:{src:"Busso Wk 1–2", sets:[DRILL_WU, txt("4 × 75m drill (+10s rest)","25m scull · 25m breathe left · 25m breathe right"), DRILL_CD]},
+  2:{src:"Busso Wk 1–2", sets:[DRILL_WU, txt("6 × 100m body position","Alternate: 50m side kick on your left side, left arm out front angled down like a plane's nose, then 50m swim breathing right. Next 100 the other side. Keep your ear in the water when you breathe."), DRILL_CD]},
+  3:{src:"Busso Wk 3–4", sets:[DRILL_WU, txt("4 / 6 / 8 × 50m","25m scull, then 25m breathing every 3 or 5 strokes. Try some sculls with fists to feel the water on your forearm."), DRILL_CD]},
+  4:{src:"Busso Wk 3–4", sets:[DRILL_WU, txt("8 × 100m sighting","Odd 100s: sight to the end of the pool every 3rd, 6th or 9th stroke — crocodile eyes, mouth in the water, don't sight and breathe at the same time. Even 100s: swim strong."), DRILL_CD]},
+  5:{src:"Busso Wk 5–6", sets:[DRILL_WU, txt("10 × 50m","25m doggy paddle (a very big dog — hands in line with shoulders, reach, press back to the thigh, head still) then 25m swim."), DRILL_CD]},
+  6:null,
+  7:{src:"Busso Wk 7", sets:[DRILL_WU, txt("12 × 50m straight-line (10–15s rest)","Swim on the black line and check you stay on it when you breathe."), DRILL_CD]},
+  8:{src:"Busso Wk 5–6", sets:[DRILL_WU, txt("10 × 100m pace play (15–30s rest)","25m slow · 25m medium · 25m slow · 25m faster. Go faster by pushing more water, not by moving everything quicker."), DRILL_CD]}
+};
+const OW_TRI = {1:"20–30 min",2:"20–30 min",3:"30–40 min",4:"30–40 min",5:"40–45 min",6:null,7:"45 min",8:"45–50 min"};
+
+const BIKE_A = "Home bike: 10 min easy, then 3–4 × 8 min increasing intensity — change gear every 2 mins, keep cadence steady. 2 min easy between. 5 min easy to finish.";
+const BIKE_B = "Home bike: 10 min easy, then 5–6 × 6 min increasing intensity — raise gear and cadence every 2 mins. 2 min easy between. 5 min easy to finish.";
+const RUN_EASY = "Easy run 30–40 min, conversational pace, flat route (keeps your running ticking over for the Sprint Tri block).";
+const bikeLog = { type:"fields", fields:[{k:"min",label:"Minutes",kind:"num"},{k:"note",label:"Gears / feel",kind:"text"}] };
+const runLog  = { type:"fields", fields:[{k:"min",label:"Minutes",kind:"num"},{k:"km",label:"km",kind:"num"}] };
+
+// ---- Busselton program sessions ----
+const BWU = txt("Warm up 300m easy");
+const BWUM = txt("Warm up 300m mixed strokes");
+const BUSSO = {
+  w12:{
+    s1:[txt("Warm up 300m easy","Really stretch off the wall — chin tucked, long neck. This builds good body position."),
+        txt("Drill 4 × 75m (+10s rest)","25m scull · 25m breathe left · 25m breathe right"),
+        reps("Main 4 × 200m (20–30s rest)",4,200,"b12_4x200","Get a little quicker on each one."),
+        txt("Cool down 200m easy, mix up strokes")],
+    s2:[BWUM,
+        txt("Technique 6 × 100m body position","Alternate: 50m kick on your left side, left arm out front angled down like a plane's nose (fingers below wrist, wrist below elbow, elbow below shoulder), then 50m swim breathing right. Next 100 the other side. Ear stays in the water when you breathe. Fins / one paddle optional."),
+        reps("Main 5 × 150m (15–30s rest)",5,150,"b12_5x150","Each 50: gentle → moderate → harder."),
+        txt("Cool down 200m easy")],
+    s3:[owLog("Open water — continuous 20–30 min","Steady breathing, good form. Start steady, finish stronger.","ow_b12")]
+  },
+  w34:{
+    s1:[BWU,
+        txt("Technique 4 / 6 / 8 × 50m","25m scull, 25m breathe every 3 or 5 strokes. Feel the water on your forearm as well as your palm — try some sculls with fists."),
+        reps("Main 3 × 300m (20–30s rest)",3,300,"b34_3x300","Hold the same steady pace on each — think of it as a broken 900m. If you're tiring, check you're exhaling, not holding your breath."),
+        txt("Cool down 200m easy")],
+    s2:[BWUM,
+        txt("Technique 8 × 100m","1st, 3rd, 5th, 7th: practise sighting to the end of the pool every 3rd, 6th or 9th stroke — crocodile eyes, mouth in the water, don't sight and breathe at the same time. Other 100s: swim strong, no extra rest."),
+        reps("Main 4 / 5 × 200m (15–30s rest)",5,200,"b34_5x200","Second half of each 200 faster than the first. Pull buoy / paddles optional.",4),
+        txt("Cool down 200m easy")],
+    s3:[owLog("Open water — 30–45 min","Practise what you'll eat on event day before these swims. Relax, keep breathing steady. Star float and handstands at the end.","ow_b34")]
+  },
+  w56:{
+    s1:[BWU,
+        txt("Technique 10 × 50m","25m doggy paddle (a very big dog — hands come out in line with the shoulders, reach all the way, press back to the thigh, head still), then 25m swim."),
+        reps("Main 3 or 4 × 400m",4,400,"b56_4x400","Week 5: 30–45s rest. Week 6: 20–30s rest. Hold the same pace on the first and the last.",3),
+        txt("Cool down 200m easy")],
+    s2:[BWUM,
+        txt("Technique 10 × 100m (15–30s rest)","25m slow · 25m medium · 25m slow · 25m faster. Go faster by pushing with more force, not by moving everything quicker."),
+        reps("Main 5 × 250m (15–30s rest)",5,250,"b56_5x250","Each 250: 50 breathe left · 50 breathe right · 50 every 3 · 50 every 5 · 50 as you like. Steady pace."),
+        txt("Cool down 200m easy")],
+    s3:[owLog("Open water — 45–60 min","Consistent pace, keep moving. Try 10 mins one way, 10 back — same distance? Look around and stay aware. Practise drafting if you have a buddy.","ow_b56")]
+  },
+  w7:{
+    s1:[BWU,
+        txt("Technique 12 × 50m (10–15s rest)","Swim on the black line (own lane) — do you stay on it when you breathe?"),
+        reps("Main 3 × 500m (30–60s rest)",3,500,"b7_3x500","Nice and steady. Take confidence from swimming this far."),
+        txt("Cool down 200m easy")],
+    s2:[BWUM,
+        reps("Technique 12 × 100m @ swim-day pace (15s rest)",12,100,"b7_12x100","What pace can you hold for the Jetty? Try to hold the same time for every 100 — better to start a bit slower and hold it."),
+        reps("Main 6 × 200m (15–30s rest)",6,200,"b7_6x200","Can you hold your 100s pace over 200? Pull / paddles on alternate 200s optional."),
+        txt("Cool down 200m easy")],
+    s3:[owLog("Open water — 45–60 min","Practise sighting. Mix in floating on your back and handstands.","ow_b7")]
+  },
+  w8:{
+    s1:[BWU,
+        txt("Technique 6 × 100m body position","50m side kick (arm out front, angled down), 50m swim breathing to the other side. Alternate sides. Swim proud."),
+        reps("4 × 100m descending (20–30s rest)",4,100,"b8_4x100","Each one ~5s faster than the one before."),
+        reps("Main 1000m steady",1,1000,"b8_1000","Start easier than you think, hold a nice rhythm. Push the water back to your thighs."),
+        txt("Cool down 200m easy")],
+    s2:[BWUM,
+        txt("Technique 6 / 9 / 12 × 100m","Breathing pattern by 100: left · right · as normal · repeat."),
+        reps("Main 6 × 100m @ race pace",6,100,"b8_6x100","Same time and same rest for each. Don't go out too fast."),
+        txt("Cool down 100m easy, finish with a star float")]
+  }
+};
+const BUSSO_WEEKS = {B1:{w:"w12",wk:1},B2:{w:"w12",wk:2},B3:{w:"w34",wk:3},B3R:{w:"w34",wk:3},B4:{w:"w34",wk:4},B5:{w:"w56",wk:5},B6:{w:"w56",wk:6},B7:{w:"w7",wk:7},B8:{w:"w8",wk:8}};
+
+// ---- the calendar ----
+const SWIM_WEEKS = [
+  {id:"T1", start:"2026-10-12", block:"tri", n:1, bb:4, focus:"Test week — find your Test Pace on Tuesday."},
+  {id:"T2", start:"2026-10-19", block:"tri", n:2, bb:5},
+  {id:"T3", start:"2026-10-26", block:"tri", n:3, bb:6},
+  {id:"T4", start:"2026-11-02", block:"tri", n:4, bb:7, focus:"Test #2 on Tuesday — your targets update automatically."},
+  {id:"T5", start:"2026-11-09", block:"tri", n:5, bb:8},
+  {id:"T6", start:"2026-11-16", block:"tri", n:6, bb:1, focus:"Ocean swim 1.25km on Saturday 21 Nov. Keep Thursday controlled. Saturday's lower session moves to Sunday."},
+  {id:"T7", start:"2026-11-23", block:"tri", n:7, bb:2},
+  {id:"T8", start:"2026-11-30", block:"tri", n:8, bb:3, focus:"Final test on Tuesday."},
+  {id:"B1", start:"2026-12-07", block:"busso", bb:4, focus:"Busselton block begins: 2 pool + 1 open water a week."},
+  {id:"B2", start:"2026-12-14", block:"busso", bb:5},
+  {id:"B3", start:"2026-12-21", block:"busso", bb:6, focus:"Christmas week — do what you can. Your break starts Sun 27 Dec, so the open water swim that day is optional."},
+  {id:"BRK", start:"2026-12-28", block:"break", bb:null, focus:"Break 27 Dec – 4 Jan. Optional: 1–2 easy 20–30 min swims to keep your feel for the water."},
+  {id:"B3R", start:"2027-01-04", block:"busso", bb:7, focus:"Back from the break — repeat Week 3 to ease in. Ocean swim 2.5km on Sunday 10 Jan replaces the open water session."},
+  {id:"B4", start:"2027-01-11", block:"busso", bb:8, focus:"Aim for longer distances or less rest than Week 3."},
+  {id:"B5", start:"2027-01-18", block:"busso", bb:1, focus:"Main set rest 30–45s this week."},
+  {id:"B6", start:"2027-01-25", block:"busso", bb:2, focus:"Main set rest 20–30s this week."},
+  {id:"B7", start:"2027-02-01", block:"busso", bb:3},
+  {id:"B8", start:"2027-02-08", block:"busso", bb:4, focus:"Race week. Keep the gym light: Mon + Wed lower only, skip Saturday. Busselton Jetty Swim Sunday 14 Feb."}
+];
+SWIM_WEEKS.forEach((w,i)=> w.order = i);
+
+function swimWeekLabel(w){
+  if(w.block==="tri") return "Tri Swim Week "+w.n;
+  if(w.block==="break") return "Christmas break";
+  const bw = BUSSO_WEEKS[w.id];
+  return "Busselton Week "+bw.wk + (w.id==="B3R" ? " (repeat)" : "");
+}
+function swimPillLabel(w){
+  if(w.block==="tri") return "T"+w.n;
+  if(w.block==="break") return "Break";
+  return "B"+BUSSO_WEEKS[w.id].wk+(w.id==="B3R"?"r":"");
+}
+function addDays(iso, n){ const d = new Date(iso+"T00:00:00"); d.setDate(d.getDate()+n); return d; }
+function fmtDate(d){ return d.toLocaleDateString("en-AU",{weekday:"short", day:"numeric", month:"short"}); }
+function fmtShort(d){ return d.toLocaleDateString("en-AU",{day:"numeric", month:"short"}); }
+
+function bbLine(w){
+  if(!w.bb) return "Booty Builder paused this week.";
+  const wk = w.bb;
+  if(w.id==="B8") return `Booty Builder Wk ${wk} (light): Mon Lower 1 · Wed Lower 2. Skip Sat Lower 3 and Upper.`;
+  if(wk===8) return `Booty Builder Wk 8: Mon Lower 1 · Tue Upper 2 (from Fri) · Wed Lower 2 (from Thu). No Saturday session in Wk 8.`;
+  const sat = w.id==="T6" ? "Sun Lower 3 (moved from Sat — event day)" : "Sat Lower 3";
+  return `Booty Builder Wk ${wk}: Mon Lower 1 · Tue Upper 2 (from Fri — the pulling day) · Wed Lower 2 · ${sat}. Upper 1 and Thursday cardio dropped.`;
+}
+
+// sessions for a week: [{id, dayOffset, title, sub, sets, note}]
+function swimSessions(w){
+  const S = [];
+  if(w.block==="break"){
+    S.push({id:"easy1", day:2, title:"Optional easy swim", sets:[owLog("Easy swim 20–30 min","Relaxed, continuous, no targets.","easy_break")]});
+    S.push({id:"easy2", day:6, title:"Optional easy swim", sets:[owLog("Easy swim 20–30 min","Pool or ocean.","easy_break")]});
+    return S;
+  }
+  if(w.block==="tri"){
+    const n = w.n;
+    S.push({id:"A", day:1, title: (n===1||n===4||n===8) ? "Swim test" : "Endurance swim", sub:"Before or after the gym. On test days, swim first.", sets:TRI_A[n], note:TRI_NOTE});
+    S.push({id:"B", day:3, title:"Pace swim", sub:"Before or after work", sets:TRI_B[n], note:TRI_NOTE});
+    const dr = TRI_DRILL[n];
+    if(dr) S.push({id:"D", day:5, title:"Drill swim (optional)", sub:"After Lower 3 · technique sets from "+dr.src, sets:dr.sets});
+    if(n===6){
+      S.push({id:"EV", day:5, title:"EVENT — Ocean swim 1.25km", sub:"Saturday 21 November", sets:[{label:"Race result", log:{type:"fields", fields:[{k:"time",label:"Time",kind:"time"},{k:"place",label:"Place / notes",kind:"text"}]}, setKey:"ev_nov"}], event:true});
+      S.push({id:"X", day:6, title:"Easy bike (optional)", sets:[{label:"Easy spin 30–45 min", log:bikeLog, setKey:"bike_easy"}]});
+    } else {
+      S.push({id:"OW", day:6, title:"Open water swim", sub:"No ocean? Swim continuously in the pool without touching the walls.", sets:[owLog("Continuous swim "+OW_TRI[n],"Steady breathing, practise sighting every 6–8 strokes. Finish stronger than you start.","ow_tri")]});
+      const runWeek = (n%2===0);
+      S.push({id:"X", day:6, title: runWeek ? "Easy run" : "Bike", sets:[ runWeek ? {label:RUN_EASY, log:runLog, setKey:"run_easy"} : {label: n<=4 ? BIKE_A : BIKE_B, log:bikeLog, setKey: n<=4 ? "bike_8min" : "bike_6min"} ]});
+    }
+    return S;
+  }
+  // busso
+  const bw = BUSSO_WEEKS[w.id];
+  const P = BUSSO[bw.w];
+  S.push({id:"S1", day:1, title:"Pool session 1", sub:"Before or after the gym. On test days, swim first.", sets:P.s1});
+  S.push({id:"S2", day:3, title:"Pool session 2", sub:"Before or after work", sets:P.s2});
+  if(w.id==="B8"){
+    S.push({id:"EV", day:6, title:"EVENT — Busselton Jetty Swim 3.6km", sub:"Sunday 14 February — this is your third swim of the week", sets:[
+      {label:"Race result", log:{type:"fields", fields:[{k:"time",label:"Time",kind:"time"},{k:"place",label:"Place / notes",kind:"text"}]}, setKey:"ev_busso"},
+      txt("Race-day reminders","Arrive early to park and register · event tattoo on, THEN sunscreen · listen to the briefing · exhale and smile as you go in · draft off faster swimmers · near the finish, sight for the gap in the pine trees · keep swimming until your fingers touch sand.")
+    ], event:true});
+  } else if(w.id==="B3R"){
+    S.push({id:"EV", day:6, title:"EVENT — Ocean swim 2.5km", sub:"Sunday 10 January — replaces this week's open water swim", sets:[{label:"Race result", log:{type:"fields", fields:[{k:"time",label:"Time",kind:"time"},{k:"place",label:"Place / notes",kind:"text"}]}, setKey:"ev_jan"}], event:true});
+  } else {
+    S.push({id:"S3", day:6, title:"Open water session", sub:"No ocean? Use time instead of distance in the pool — 50m ≈ 1 min.", sets:P.s3});
+  }
+  if(w.id!=="B8" && w.id!=="B3R"){
+    const runWeek = (w.order%2===1);
+    S.push({id:"X", day:6, title: runWeek ? "Easy run (optional)" : "Bike (optional)", sets:[ runWeek ? {label:RUN_EASY, log:runLog, setKey:"run_easy"} : {label:BIKE_B, log:bikeLog, setKey:"bike_6min"} ]});
+  }
+  return S;
+}
+
+// ---------- time helpers ----------
+function parseTime(str){
+  if(str===null || str===undefined) return null;
+  str = String(str).trim();
+  if(!str) return null;
+  if(str.includes(":") || str.includes(".")){
+    const parts = str.split(/[:.]/).map(p=>parseInt(p,10));
+    if(parts.some(isNaN)) return null;
+    return parts.reduce((acc,p)=> acc*60 + p, 0);
+  }
+  if(!/^\d+$/.test(str)) return null;
+  if(str.length<=2) return parseInt(str,10);
+  const ss = parseInt(str.slice(-2),10), rest = str.slice(0,-2);
+  if(rest.length<=2) return parseInt(rest,10)*60 + ss;
+  return parseInt(rest.slice(0,-2),10)*3600 + parseInt(rest.slice(-2),10)*60 + ss;
+}
+function fmtTime(sec){
+  if(sec===null || sec===undefined || isNaN(sec)) return "";
+  sec = Math.round(sec);
+  const h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60), s = sec%60;
+  return h ? `${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}` : `${m}:${String(s).padStart(2,"0")}`;
+}
+
+// ---------- storage (reuses booty_picks as a key/value store) ----------
+function swimKey(weekId, slot, idx, setKey){ return ["swim", weekId, slot, idx, setKey].join("|"); }
+function swimGet(weekId, slot, idx, setKey){ return cache.picks[swimKey(weekId, slot, idx, setKey)] || ""; }
+function swimSet(weekId, slot, idx, setKey, val){
+  const k = swimKey(weekId, slot, idx, setKey);
+  cache.picks[k] = val;
+  debouncedWrite("s_"+k, ()=>{
+    sbUpsert("booty_picks", {pick_key:k, value:val});
+    localStorage.setItem("supabase_cache_backup", JSON.stringify(cache));
+  }, 500);
+}
+function swimSettingGet(name){ return cache.picks["swim|settings|"+name] || ""; }
+function swimSettingSet(name, val){
+  cache.picks["swim|settings|"+name] = val;
+  debouncedWrite("ss_"+name, ()=> sbUpsert("booty_picks", {pick_key:"swim|settings|"+name, value:val}), 500);
+}
+
+// all logged entries for a setKey, grouped by week+slot, sorted oldest → newest
+function swimEntries(setKey){
+  const groups = {};
+  Object.keys(cache.picks).forEach(k=>{
+    if(!k.startsWith("swim|")) return;
+    const p = k.split("|");
+    if(p.length!==5 || p[4]!==setKey) return;
+    const v = cache.picks[k];
+    if(!v) return;
+    const w = SWIM_WEEKS.find(x=>x.id===p[1]);
+    if(!w) return;
+    const g = groups[p[1]+"|"+p[2]] = groups[p[1]+"|"+p[2]] || {week:w, slot:p[2], vals:[]};
+    g.vals[parseInt(p[3],10)] = v;
+  });
+  return Object.values(groups).sort((a,b)=> a.week.order-b.week.order || (a.slot<b.slot?-1:1));
+}
+function swimLastBefore(setKey, week, slot){
+  const e = swimEntries(setKey).filter(g=> g.week.order < week.order || (g.week.order===week.order && g.slot < slot));
+  return e.length ? e[e.length-1] : null;
+}
+
+// Test Pace (sec per 100m) in force for a given week
+function testResults(){
+  return SWIM_WEEKS.filter(w=>w.block==="tri" && [1,4,8].includes(w.n)).map(w=>{
+    const vals = [0,1,2,3,4].map(i=> parseTime(swimGet(w.id, "A#0", i, "test5x200"))).filter(v=>v);
+    return {week:w, vals, avg: vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null};
+  });
+}
+function tpForWeek(week){
+  const tests = testResults().filter(t=> t.avg && t.vals.length>=3 && t.week.order<=week.order);
+  if(tests.length) return {tp: tests[tests.length-1].avg/2, src:"Test "+swimPillLabel(tests[tests.length-1].week)};
+  const manual = parseTime(swimSettingGet("tp_manual"));
+  if(manual) return {tp: manual, src:"manual"};
+  return null;
+}
+function currentSwimWeek(){
+  const today = new Date(); today.setHours(0,0,0,0);
+  let found = SWIM_WEEKS[0];
+  SWIM_WEEKS.forEach(w=>{ if(new Date(w.start+"T00:00:00") <= today) found = w; });
+  return found;
+}
+
+// ---------- render ----------
+function renderSwim(){
+  if(!state.swimWeek) state.swimWeek = currentSwimWeek().id;
+  const tabs = [["pace","Pace & Events"],["plan","Plan"]];
+  let html = `<div class="pillrow" id="swimTabs">`;
+  tabs.forEach(([k,l])=> html += `<button class="pill ${state.swimTab===k?'active swim':''}" data-swimtab="${k}">${l}</button>`);
+  html += `</div>`;
+  if(state.swimTab==="pace") return html + renderSwimPace();
+  return html + renderSwimPlan();
+
+  html += `<div class="pillrow daypills" id="swimWeekPills">`;
+  SWIM_WEEKS.forEach(w=>{
+    html += `<button class="pill ${w.id===state.swimWeek?'active swim':''}" data-swimweek="${w.id}">${swimPillLabel(w)} <span class="pilldate">${fmtShort(addDays(w.start,0))}</span></button>`;
+  });
+  html += `</div>`;
+
+  const w = SWIM_WEEKS.find(x=>x.id===state.swimWeek);
+  const tpInfo = tpForWeek(w);
+  html += `<div class="weekhead">
+    <div class="daytitle">${swimWeekLabel(w)}</div>
+    <div class="daysubtitle">${fmtDate(addDays(w.start,0))} – ${fmtDate(addDays(w.start,6))}</div>
+    ${w.focus?`<div class="weekfocus">${w.focus}</div>`:""}
+    <div class="bbline">🍑 ${bbLine(w)}</div>
+    ${w.block==="tri" ? `<div class="tpline">${tpInfo ? `Test Pace: <b>${fmtTime(tpInfo.tp)}/100m</b> <span class="secnote">(${tpInfo.src})</span>` : `Test Pace not set yet — log your test and targets will appear.`}</div>` : ""}
+  </div>`;
+
+  swimSessions(w).forEach(s=>{ html += renderSwimSession(w, s, tpInfo); });
+  return html;
+}
+
+function renderSwimSession(w, s, tpInfo){
+  const date = addDays(w.start, s.day);
+  const done = swimGet(w.id, s.id, 0, "done") === "1";
+  let html = `<div class="daycard swimcard ${s.event?'eventcard':''}">
+    <div class="dayhead">
+      <div>
+        <div class="daytitle">${s.title}</div>
+        <div class="daysubtitle">${fmtDate(date)}${s.sub?` · ${s.sub}`:""}</div>
+      </div>
+      <label class="donetoggle"><input type="checkbox" class="swimDone" data-week="${w.id}" data-sess="${s.id}" ${done?"checked":""}/><span>Done</span></label>
+    </div>`;
+  s.sets.forEach((set, i)=>{
+    const slot = s.id+"#"+i;
+    html += `<div class="seccard ${set.log?'sec-swim':'sec-ref'}">`;
+    html += `<div class="swimsetlabel">${set.label}${set.then?` <span class="thenTxt">· ${set.then}</span>`:""}</div>`;
+    if(set.detail) html += `<div class="swimdetail">${set.detail}</div>`;
+    if(set.log) html += renderSwimLog(w, slot, set, tpInfo);
+    html += `</div>`;
+  });
+  if(s.note) html += `<div class="secnote">${s.note}</div>`;
+  const note = swimGet(w.id, s.id, 0, "note");
+  html += `<textarea class="swimNote" data-week="${w.id}" data-sess="${s.id}" placeholder="Notes — how it felt, conditions…">${escapeHtml(note)}</textarea>`;
+  html += `</div>`;
+  return html;
+}
+function escapeHtml(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
+
+function renderSwimLog(w, slot, set, tpInfo){
+  const L = set.log;
+  const last = swimLastBefore(set.setKey, w, slot);
+  let html = "";
+  if(L.type==="reps"){
+    const target = (L.off!==undefined && tpInfo) ? (tpInfo.tp + L.off) * L.d/100 : null;
+    html += `<table class="setstable swimtable"><tbody>`;
+    const cur = [];
+    for(let i=0;i<L.n;i++){
+      const v = swimGet(w.id, slot, i, set.setKey);
+      if(parseTime(v)) cur.push(parseTime(v));
+      const lastV = last && last.vals[i] ? last.vals[i] : "";
+      const optional = L.nMin && i>=L.nMin;
+      html += `<tr>
+        <td class="setlabel">${L.d>=1000?'Swim':'Rep '+(i+1)}${optional?' <span class="opt">opt</span>':''}${target?`<div class="target">🎯 ${fmtTime(target)}</div>`:''}</td>
+        <td><input type="text" inputmode="numeric" class="wInput tInput swimIn" data-week="${w.id}" data-slot="${slot}" data-idx="${i}" data-setkey="${set.setKey}" value="${escapeHtml(v)}" placeholder="${lastV?lastV:'m:ss'}"/></td>
+      </tr>`;
+    }
+    html += `</tbody></table>`;
+    if(cur.length){
+      const avg = cur.reduce((a,b)=>a+b,0)/cur.length;
+      html += `<div class="lasthint thisavg">This session: avg ${fmtTime(avg)} (${fmtTime(avg/L.d*100)}/100m)${L.test?` → Test Pace ${fmtTime(avg/2)}/100m`:''}</div>`;
+    }
+    if(last){
+      const lv = last.vals.map(v=>parseTime(v)).filter(v=>v);
+      const lavg = lv.length ? lv.reduce((a,b)=>a+b,0)/lv.length : null;
+      html += `<div class="lasthint">Last time (${swimPillLabel(last.week)}): ${last.vals.map(v=>v||'–').join(' / ')}${lavg?` · avg ${fmtTime(lavg)}`:''}</div>`;
+    } else {
+      html += `<div class="lasthint">First time swimming this set</div>`;
+    }
+    html += `<div class="lasthint tiny">Type 345 for 3:45 — it formats itself.</div>`;
+  } else {
+    html += `<div class="fieldrow">`;
+    L.fields.forEach((f, i)=>{
+      const v = swimGet(w.id, slot, i, set.setKey);
+      const lastV = last && last.vals[i] ? last.vals[i] : "";
+      const im = f.kind==="text" ? 'type="text"' : (f.kind==="time" ? 'type="text" inputmode="numeric"' : 'type="number" inputmode="decimal" step="any"');
+      html += `<label class="fieldbox ${f.kind==='text'?'wide':''}"><span>${f.label}</span>
+        <input ${im} class="wInput swimIn ${f.kind==='time'?'tInput':''}" data-week="${w.id}" data-slot="${slot}" data-idx="${i}" data-setkey="${set.setKey}" value="${escapeHtml(v)}" placeholder="${lastV?escapeHtml(lastV):(f.kind==='time'?'m:ss':'')}"/></label>`;
+    });
+    html += `</div>`;
+    if(last){
+      html += `<div class="lasthint">Last time (${swimPillLabel(last.week)}): ${L.fields.map((f,i)=> last.vals[i]?`${f.label} ${last.vals[i]}`:null).filter(Boolean).join(' · ')}</div>`;
+    }
+  }
+  return html;
+}
+
+function renderSwimPace(){
+  const cw = currentSwimWeek();
+  const tpInfo = tpForWeek(cw);
+  let html = `<div class="daycard"><div class="daytitle">Your Test Pace</div>`;
+  html += tpInfo ? `<div class="bigtp">${fmtTime(tpInfo.tp)}<span>/100m</span></div><div class="secnote">From ${tpInfo.src==="manual"?"your manual entry":tpInfo.src}</div>`
+                 : `<div class="secnote">No test logged yet. Do your first test (5 × 200m) on Tue 13 Oct.</div>`;
+  html += `<table class="histtable" style="margin-top:10px"><tr><th>Test</th><th>200m times</th><th>Avg 200</th><th>TP</th></tr>`;
+  testResults().forEach(t=>{
+    html += `<tr><td>${swimPillLabel(t.week)} · ${fmtShort(addDays(t.week.start,1))}</td><td>${t.vals.length?t.vals.map(fmtTime).join(', '):'–'}</td><td>${t.avg?fmtTime(t.avg):'–'}</td><td>${t.avg?fmtTime(t.avg/2):'–'}</td></tr>`;
+  });
+  html += `</table>
+    <div class="fieldrow" style="margin-top:12px"><label class="fieldbox"><span>Manual TP (used only until your first test)</span>
+    <input type="text" inputmode="numeric" class="wInput tInput" id="tpManual" value="${escapeHtml(swimSettingGet('tp_manual'))}" placeholder="e.g. 1:50"/></label></div>
+  </div>`;
+
+  if(tpInfo){
+    const offs = [[-5,"5s faster"],[-3,"3s faster"],[0,"Test Pace"],[5,"5s slower"],[10,"10s slower"]];
+    html += `<div class="daycard"><div class="daytitle">Target times</div><div class="secnote">What each pace means for each rep distance.</div>
+      <table class="histtable" style="margin-top:8px"><tr><th></th><th>50m</th><th>100m</th><th>150m</th><th>200m</th><th>300m</th><th>400m</th></tr>`;
+    offs.forEach(([o,l])=>{
+      html += `<tr><td>${l}</td>${[50,100,150,200,300,400].map(d=>`<td>${fmtTime((tpInfo.tp+o)*d/100)}</td>`).join("")}</tr>`;
+    });
+    html += `</table></div>`;
+  }
+
+  html += `<div class="daycard"><div class="daytitle">Events</div>`;
+  const today = new Date(); today.setHours(0,0,0,0);
+  SWIM_EVENTS.forEach(ev=>{
+    const d = new Date(ev.date+"T00:00:00");
+    const days = Math.round((d-today)/86400000);
+    const res = swimEntries(ev.key);
+    const r = res.length ? res[res.length-1].vals : [];
+    html += `<div class="eventrow"><div><b>${ev.name} — ${ev.dist}</b><div class="secnote">${fmtDate(d)}</div></div>
+      <div class="evright">${r[0] ? `<b>${r[0]}</b>` : (days>=0 ? `${days} days` : "–")}</div></div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+// Detailed drill & technique guide. Each item: name, where (where it shows up in your plan), what, how[], focus, mistakes, gear
+const SWIM_DRILLS = [
+  {group:"Session terms", items:[
+    {name:"Pull", where:"Tri plan endurance swims · Busso main sets (optional)",
+     what:"Freestyle using only your arms, with a pull buoy between your legs so they float and don't kick.",
+     how:["Squeeze the pull buoy high between your upper thighs (not near the knees).","Let your legs relax and trail behind — no kicking.","Swim normal freestyle, rotating your hips and shoulders together as one unit.","Keep breathing on your usual pattern."],
+     focus:"A long reach, then 'catch' the water with your fingertips and forearm pointing down, and push it all the way back past your hip.",
+     mistakes:"Hips sinking or legs swaying side to side — gently squeeze the buoy and tighten your tummy. Short strokes that finish at the waist instead of the thigh.",
+     gear:"Pull buoy. Paddles optional once you're comfortable."},
+    {name:"Kick", where:"Tri plan endurance swims",
+     what:"Legs only. Builds leg endurance and teaches you to keep your hips and legs high.",
+     how:["Hold the far end of a kickboard with arms straight out in front.","Face in the water and lift to breathe, or keep your chin on the water if that's easier.","Kick from the hips with long, almost-straight legs and loose, pointed ankles.","Small, quick kicks — your heels should just break the surface."],
+     focus:"The power comes from your hips and thighs, not your knees.",
+     mistakes:"Bending the knees a lot (a 'bicycle' kick), flexed feet (toes pointing down to the floor), or big splashing kicks. Holding your head very high makes your legs sink.",
+     gear:"Kickboard. Fins make it easier while you build strength."},
+    {name:"Catch-up", where:"Tri plan endurance swims",
+     what:"Freestyle where one arm waits out in front until the other arm 'catches up' and touches it.",
+     how:["Start with both arms stretched out in front.","Pull with one arm, recover it over the water and touch the waiting hand.","Only then does the other arm start its pull.","Breathe as normal to the side."],
+     focus:"A full reach on every stroke, a balanced glide, and rotating onto your side as you pull.",
+     mistakes:"Letting the waiting arm drop towards the bottom, rushing the stroke, or lifting your head to breathe.",
+     gear:"None. Easier version: '3/4 catch-up' — start the next pull when the recovering hand passes your head."},
+    {name:"Recovery pull", where:"Tri plan pace swims",
+     what:"An easy lap with the pull buoy between the hard efforts.",
+     how:["Pop the buoy in and swim relaxed freestyle, arms only.","Slow, smooth strokes and deep, easy breathing."],
+     focus:"Getting your breath back while still moving — it is not meant to be hard.",
+     mistakes:"Swimming it too fast and going into the next hard set tired.",
+     gear:"Pull buoy."},
+    {name:"Test Pace (TP)", where:"Tri plan — tests on Tue 13 Oct, 3 Nov, 1 Dec",
+     what:"Your hard-but-sustainable pace per 100m. Most of the tri sets are written as faster or slower than it.",
+     how:["Swim 5 × 200m hard but even, with 30s rest between each.","Log all five times in the tracker.","Average 200 time ÷ 2 = your Test Pace per 100m (the tracker does this for you)."],
+     focus:"\"5s slower than TP\" = your TP plus 5 seconds per 100m. \"3s faster\" = TP minus 3 seconds. Your 🎯 targets show the time for each rep.",
+     mistakes:"Going out too fast on the first 200 and fading — aim for five similar times.",
+     gear:"A pace clock or watch."}
+  ]},
+  {group:"Technique drills", items:[
+    {name:"Scull", where:"Busso Wk 1–4 · Sat drill swims (tri Wk 1 & 3)",
+     what:"Small sweeping hand movements out in front that move you forward. Teaches you to 'feel' the water, which is the base of a good catch.",
+     how:["Float face down with arms stretched out in front, shoulder-width apart, hands just under the surface.","Sweep both hands outwards with palms angled slightly out, then inwards with palms angled slightly in — like smoothing sand.","Keep your elbows still and almost straight; the movement comes from the forearms and wrists.","Add a gentle kick (or a pull buoy) to keep your legs up. Breathe by lifting your face slightly forward, or roll to the side."],
+     focus:"Feel the pressure of the water on your palms and forearms. You'll move slowly — that's normal.",
+     mistakes:"Turning it into a pull (pushing water back instead of side to side), bending the elbows a lot, or floppy wrists.",
+     gear:"Pull buoy optional. Fins help if your legs sink."},
+    {name:"Fist swimming", where:"Busso Wk 3–4 (sculls with fists) · use any drill day",
+     what:"Freestyle with your hands closed into loose fists.",
+     how:["Make loose fists, thumbs tucked in.","Swim normal freestyle — 25m fists, then 25m with open hands."],
+     focus:"With no palm to pull with, you have to use your forearm. Bend at the elbow early so your forearm points to the bottom. When you open your hands again, the catch feels much stronger.",
+     mistakes:"Dropping the elbow and 'slipping' through the water, or rushing the stroke to make up for less grip.",
+     gear:"None."},
+    {name:"Side kick (body position)", where:"Busso Wk 1–2 & 8 · Sat drill swim (tri Wk 2)",
+     what:"Kicking on your side to teach balance, rotation and breathing without lifting your head.",
+     how:["Lie on your left side, left arm stretched out front and angled slightly down like the nose of a plane: fingers lower than wrist, wrist lower than elbow, elbow lower than shoulder.","Right arm rests along your side, face looking at the bottom of the pool.","Kick steadily for 50m. When you need a breath, roll your head (not your whole body) to breathe, keeping your ear in the water.","Then swim 50m breathing to your right. Swap sides on the next 100."],
+     focus:"Staying long and balanced on your side, with your hips at the surface.",
+     mistakes:"Lifting your head to breathe (your legs drop), rolling onto your tummy, or bending the front arm.",
+     gear:"Fins really help. One paddle on the front hand is optional."},
+    {name:"Breathe left / breathe right (BL / BR)", where:"Busso Wk 1–2, 5–6 & 8",
+     what:"Breathing only to one side for the whole length.",
+     how:["Pick a side and breathe only to that side for 25m or 50m.","Then swap to the other side."],
+     focus:"Your weaker side will feel awkward. That's exactly why you practise it.",
+     mistakes:"Lifting the head forward instead of rotating to the side.",
+     gear:"None."},
+    {name:"Bilateral breathing", where:"Busso Wk 3–6 & 8 · ocean swims",
+     what:"Breathing every 3 (or 5) strokes, so you alternate sides.",
+     how:["Breathe out steadily under water through your nose and mouth — a constant stream of bubbles.","On every 3rd stroke, roll your head with your body rotation and breathe in quickly.","Keep one goggle in the water as you breathe, then return your face down."],
+     focus:"In the ocean, waves, sun and swimmers can be on either side. Being able to breathe both ways keeps you calm and swimming straighter.",
+     mistakes:"Holding your breath under water (you'll run out of air), lifting your head, or over-rotating onto your back.",
+     gear:"None."},
+    {name:"Doggy paddle drill", where:"Busso Wk 5–6 · Sat drill swim (tri Wk 5)",
+     what:"An exaggerated doggy paddle to fix your hand entry and the length of your pull.",
+     how:["Keep your head still, looking slightly forward.","Hands come out in line with your shoulders (not crossing the middle).","Reach all the way forward, then press back all the way to your thigh, under the water.","Think 'a very big dog, not a little one'. 25m doggy paddle, then 25m swim."],
+     focus:"Hands tracking in line with your shoulders and a full pull back to the thigh.",
+     mistakes:"Short choppy paddles, or hands crossing over in front of your head.",
+     gear:"None."},
+    {name:"Fingertip drag", where:"Any drill day",
+     what:"Freestyle where you drag your fingertips along the surface as your arm comes forward.",
+     how:["Swim easy freestyle.","As each arm recovers over the water, let your fingertips trail along the surface from hip to head.","Keep your elbow high and your hand relaxed."],
+     focus:"A high, relaxed elbow on the recovery, which keeps your shoulders happy.",
+     mistakes:"Swinging the arm wide around the side.",
+     gear:"None."},
+    {name:"Single-arm", where:"Any drill day",
+     what:"Freestyle with one arm only.",
+     how:["Keep the other arm out in front (easier) or by your side (harder).","Pull with the working arm and breathe to the side of the working arm.","25m each arm."],
+     focus:"Each side's catch and pull on its own. It shows up which side is weaker.",
+     mistakes:"Hips swinging — keep your core firm.",
+     gear:"Fins help."},
+    {name:"Pace play", where:"Busso Wk 5–6 · Sat drill swim (tri Wk 8)",
+     what:"Changing speed inside a 100: 25m slow, 25m medium, 25m slow, 25m faster.",
+     how:["Swim each 25 at the set speed.","To go faster, push more water on each stroke rather than moving your arms quicker."],
+     focus:"Learning what different paces feel like, so you can control your pace in a race.",
+     mistakes:"Spinning your arms faster and losing your stroke.",
+     gear:"None."},
+    {name:"Black-line swimming", where:"Busso Wk 7 · Sat drill swim (tri Wk 7)",
+     what:"Checking whether you swim straight.",
+     how:["Get a lane to yourself.","Swim directly over the black line on the pool floor.","Notice whether you drift off it when you breathe."],
+     focus:"Swimming straight. In the ocean, zig-zagging can add 10% to your distance — that's an extra 360m at Busso.",
+     mistakes:"Over-rotating or crossing your hands over in front when you breathe, which pushes you sideways.",
+     gear:"None."}
+  ]},
+  {group:"Pacing", items:[
+    {name:"Descending", where:"Busso Wk 8",
+     what:"Each rep slightly faster than the one before — for example about 5 seconds quicker each 100.",
+     how:["Start the first rep comfortably.","Build a little on each one without adding rest."],
+     focus:"Controlled, steady build.", mistakes:"Going too hard on the first rep.", gear:"Pace clock."},
+    {name:"Broken swim", where:"Busso Wk 3–4",
+     what:"A long distance split into chunks with short rest, e.g. 3 × 300m ≈ a broken 900m.",
+     how:["Keep the rest short (20–30s).","Hold the same pace on every chunk."],
+     focus:"Getting used to long distance without stopping for long.", mistakes:"Taking extra rest at the wall.", gear:"Pace clock."},
+    {name:"Even pacing", where:"Every main set · race day",
+     what:"The same time for every rep, or the same pace start to finish.",
+     how:["Start slightly slower than you think you can go.","Check your time each 100 and keep it the same."],
+     focus:"The 'cake' rule from the Busso plan: if you eat too much cake at the start, there's none left for the finish.",
+     mistakes:"Getting excited and going out too fast.", gear:"Pace clock or watch."}
+  ]},
+  {group:"Open water skills", items:[
+    {name:"Sighting", where:"Busso Wk 3–4 & 7 · every ocean swim",
+     what:"Looking forward to check your direction without stopping.",
+     how:["Every 6–8 strokes in the ocean (every 3rd, 6th or 9th in pool drills), press down slightly with your front hand.","Lift just your eyes above the water — 'crocodile eyes', mouth still under.","Spot your target, then turn your head to the side to breathe as normal.","Try sighting before you breathe and after you breathe to see which suits you."],
+     focus:"Keep it quick and low so your legs don't sink.",
+     mistakes:"Lifting your whole head, or trying to sight and breathe at the same time.",
+     gear:"Tinted or mirrored goggles help in glare."},
+    {name:"Drafting", where:"Busso Wk 5–6 (with a buddy) · events",
+     what:"Swimming in another swimmer's slipstream to save energy.",
+     how:["Feet drafting: sit just behind their feet, close enough to see their bubbles but without touching.","Hip drafting: swim beside them with your head level with their hip."],
+     focus:"Choose someone just a little faster than you and swimming straight.",
+     mistakes:"Tapping their feet (annoying), or following someone who's going off course.",
+     gear:"A buddy to practise with."},
+    {name:"Swim-straight test", where:"Ocean swims",
+     what:"A quick check of how much you drift.",
+     how:["Pick a fixed target.","Close your eyes and take 20 strokes at your normal rhythm.","Open your eyes and see how far off course you are."],
+     focus:"Seeing which way you naturally drift, so you can correct it.", mistakes:"Changing your stroke during the test.", gear:"None."},
+    {name:"No-wall pool swim", where:"When you can't get to the ocean",
+     what:"Simulating open water in the pool.",
+     how:["Swim continuously without touching the walls — turn in the water.","Don't stand up unless you're resting.","Throw in a forward roll or handstand now and then to disorient yourself."],
+     focus:"Building the continuous swimming you'll need in the ocean.", mistakes:"Grabbing the wall out of habit.", gear:"None."},
+    {name:"Star float & handstands", where:"Busso open water sessions",
+     what:"Relaxation skills for open water.",
+     how:["Star float: lie on your back, arms and legs spread wide, breathe slowly.","Handstands: just for fun and confidence in the water."],
+     focus:"A star float is how you recover in the ocean if you need a breather, without stopping to stand.", mistakes:"Tensing up — relax and the water holds you.", gear:"None."},
+    {name:"Event-day fuel practice", where:"Busso Wk 3–4 open water sessions",
+     what:"Eating your planned event-day food before your longer swims.",
+     how:["Have your pre-race breakfast or snack before a long ocean swim.","Note how it sits in your stomach."],
+     focus:"No surprises on race day.", mistakes:"Trying something new on event day.", gear:"Your race food."}
+  ]},
+  {group:"Gear", items:[
+    {name:"Pull buoy", what:"A foam float you squeeze between your thighs for pull sets.", how:[], focus:"", mistakes:"", gear:""},
+    {name:"Kickboard", what:"A flat float held out in front for kick sets.", how:[], focus:"", mistakes:"", gear:""},
+    {name:"Fins", what:"Short training fins help you stay balanced in drills like side kick and single-arm.", how:[], focus:"", mistakes:"", gear:""},
+    {name:"Hand paddles", what:"Add resistance to pull sets. Only use them once your stroke is solid — they can strain the shoulders.", how:[], focus:"", mistakes:"", gear:""},
+    {name:"Cap & goggles", what:"Get used to a cap — you'll wear one on event day. Tinted or mirrored goggles cut glare in the ocean. A good fit stays on your face for a moment without the strap.", how:[], focus:"", mistakes:"", gear:""}
+  ]}
+];
+function renderSwimDrills(){
+  let html = `<div class="secnote" style="margin:2px 2px 8px">Tap a drill to open it.</div>`;
+  SWIM_DRILLS.forEach(g=>{
+    html += `<div class="drillgroup">${g.group}</div>`;
+    g.items.forEach(it=>{
+      html += `<details class="drillcard"><summary><span class="drillname">${it.name}</span>${it.where?`<span class="drillwhere">${it.where}</span>`:""}</summary>
+        <div class="drillbody">
+          <p>${it.what}</p>
+          ${it.how && it.how.length ? `<div class="drillh">How to do it</div><ol>${it.how.map(s=>`<li>${s}</li>`).join("")}</ol>` : ""}
+          ${it.focus ? `<div class="drillh">Focus on</div><p>${it.focus}</p>` : ""}
+          ${it.mistakes ? `<div class="drillh">Common mistakes</div><p>${it.mistakes}</p>` : ""}
+          ${it.gear ? `<div class="drillh">Gear</div><p>${it.gear}</p>` : ""}
+        </div></details>`;
+    });
+  });
+  return html;
+}
+
+function renderSwimPlan(){
+  return `<div class="daycard"><div class="daytitle">Your week</div>
+    <ul class="reflist">
+      <li><b>Mon</b> — Lower 1</li>
+      <li><b>Tue</b> — Upper 2 (pull) + swim, either order (swim first on test days)</li>
+      <li><b>Wed</b> — Lower 2 · optional push finisher if you'll skip Friday</li>
+      <li><b>Thu</b> — Swim (replaces the optional intervals / run)</li>
+      <li><b>Fri</b> — Upper 1 (push) optional, otherwise rest</li>
+      <li><b>Sat</b> — Lower 3 · optional drill swim (tri block)</li>
+      <li><b>Sun</b> — Open water swim · bike or easy run (alternating weeks)</li>
+    </ul>
+    <div class="secnote">Everything lives in the Booty Builder tab: Upper 2 (pull) is on Tuesday and Upper 1 (push) on Friday, and your swims sit under each day, marked 🏊.</div>
+  </div>
+  <div class="daycard"><div class="daytitle">Timeline</div>
+    <ul class="reflist">
+      <li><b>12 Oct – 6 Dec</b> — Tri swim plan Weeks 1–8 (tests Tue 13 Oct, 3 Nov, 1 Dec)</li>
+      <li><b>Sat 21 Nov</b> — Ocean swim 1.25km</li>
+      <li><b>7 – 27 Dec</b> — Busselton Weeks 1–3</li>
+      <li><b>27 Dec – 4 Jan</b> — Break</li>
+      <li><b>4 – 10 Jan</b> — Busselton Week 3 again · <b>Sun 10 Jan</b> ocean swim 2.5km</li>
+      <li><b>11 Jan – 14 Feb</b> — Busselton Weeks 4–8 · <b>Sun 14 Feb</b> Busselton Jetty Swim 3.6km</li>
+    </ul>
+  </div>
+  <div class="daycard"><div class="daytitle">Sources</div>
+    <ul class="reflist">
+      <li>Tri block: "Boost your swim skills in 8 weeks" (220 Triathlon, coach Dermott Hayes). Tuesday = the plan's Monday swim, Thursday = the plan's Wednesday swim. Using the Olympic/70.3 test. Bike sessions from the same plan.</li>
+      <li>Busselton block: Swimming Women Busselton Jetty Swim training program (full 3.6km).</li>
+      <li>Added by Claude: Saturday drill swims (technique sets from the Busselton program, since the tri plan's p90 session wasn't included), Sunday open water progression in the tri block, easy run weeks, the break and repeat week.</li>
+    </ul>
+  </div>`;
+}
+
+function attachSwimHandlers(){
+  document.querySelectorAll("#swimTabs .pill").forEach(b=> b.onclick = ()=>{ state.swimTab = b.dataset.swimtab; render(); });
+  document.querySelectorAll("#swimWeekPills .pill").forEach(b=> b.onclick = ()=>{ state.swimWeek = b.dataset.swimweek; render(); });
+  document.querySelectorAll(".swimIn").forEach(inp=>{
+    inp.oninput = ()=> swimSet(inp.dataset.week, inp.dataset.slot, parseInt(inp.dataset.idx,10), inp.dataset.setkey, inp.value.trim());
+    if(inp.classList.contains("tInput")){
+      inp.onblur = ()=>{
+        const s = parseTime(inp.value);
+        if(s){ inp.value = fmtTime(s); swimSet(inp.dataset.week, inp.dataset.slot, parseInt(inp.dataset.idx,10), inp.dataset.setkey, inp.value); }
+        rerenderIfIdle();
+      };
+    }
+  });
+  document.querySelectorAll(".swimDone").forEach(cb=>{
+    cb.onchange = ()=> swimSet(cb.dataset.week, cb.dataset.sess, 0, "done", cb.checked ? "1" : "");
+  });
+  document.querySelectorAll(".swimNote").forEach(t=>{
+    t.oninput = ()=> swimSet(t.dataset.week, t.dataset.sess, 0, "note", t.value);
+  });
+  const tpm = document.getElementById("tpManual");
+  if(tpm){
+    tpm.oninput = ()=> swimSettingSet("tp_manual", tpm.value.trim());
+    tpm.onblur = ()=>{ const s = parseTime(tpm.value); if(s){ tpm.value = fmtTime(s); swimSettingSet("tp_manual", tpm.value); } rerenderIfIdle(); };
+  }
+}
+
+// re-render (to refresh averages / targets) only once the user has left the inputs, keeping scroll position
+function rerenderIfIdle(){
+  setTimeout(()=>{
+    const a = document.activeElement;
+    if(a && (a.tagName==="INPUT" || a.tagName==="TEXTAREA")) return;
+    render(true);
+  }, 0);
+}
+
+// ============================================================
 // APP LOGIC — Supabase-synced version
 // ============================================================
 
@@ -3906,7 +4648,10 @@ let state = {
   bootyDay: "Monday",
   corePhase: "p1",
   coreWeek: 1,
-  coreDay: "Mon"
+  coreDay: "Mon",
+  swimTab: "pace",
+  bootyCal: null,
+  swimWeek: null
 };
 
 // in-memory mirror of the database, hydrated on load and kept current locally
@@ -3916,9 +4661,17 @@ let syncFailed = false;
 
 // ---------- Supabase REST helpers ----------
 async function sbFetchAll(table){
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=*`, { headers: SB_HEADERS });
-  if(!res.ok) throw new Error("fetch failed: "+table);
-  return await res.json();
+  // page through in chunks of 1000 so large tables (e.g. swim logs) load completely
+  let all = [], from = 0;
+  while(true){
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=*`, { headers: { ...SB_HEADERS, Range: `${from}-${from+999}` } });
+    if(!res.ok) throw new Error("fetch failed: "+table);
+    const rows = await res.json();
+    all = all.concat(rows);
+    if(rows.length < 1000) break;
+    from += 1000;
+  }
+  return all;
 }
 async function sbUpsert(table, row){
   try{
@@ -4091,15 +4844,18 @@ function setCoreBlockOverride(phaseKey, week, day, val){
 }
 
 // ---------- render: top-level ----------
-function render(){
+function render(keepScroll){
   document.querySelectorAll(".section-toggle button").forEach(b=>{
     b.classList.toggle("active", b.dataset.section === state.section);
   });
   const app = document.getElementById("app");
   if(!dataReady){ app.innerHTML = `<div class="loadingnote">Loading your data…</div>`; return; }
-  app.innerHTML = (state.section === "booty" ? renderBooty() : renderCore()) + renderSyncBadge();
+  const y = window.scrollY;
+  const body = state.section === "booty" ? renderBooty() : state.section === "swim" ? renderSwim() : state.section === "drills" ? renderSwimDrills() : renderCore();
+  app.innerHTML = body + renderSyncBadge();
   attachHandlers();
-  window.scrollTo({top:0});
+  attachSwimHandlers();
+  if(keepScroll) window.scrollTo({top:y}); else window.scrollTo({top:0});
 }
 
 function renderSyncBadge(){
@@ -4111,41 +4867,130 @@ function renderSyncBadge(){
 // ============================================================
 // BOOTY BUILDER
 // ============================================================
+// ---------- program calendar: Booty Builder weeks across repeats, lined up with the swim plan ----------
+// abs = absolute program week (round 1 = 1–8, round 2 = 9–16, round 3 = 17–24) — used as the "week" for weights so repeats don't overwrite
+const BB_CAL = (()=>{
+  const starts = ["2026-09-21","2026-09-28","2026-10-05","2026-10-12","2026-10-19","2026-10-26","2026-11-02","2026-11-09",
+                  "2026-11-16","2026-11-23","2026-11-30","2026-12-07","2026-12-14","2026-12-21", "BREAK:2026-12-28",
+                  "2027-01-04","2027-01-11","2027-01-18","2027-01-25","2027-02-01","2027-02-08","2027-02-15","2027-02-22","2027-03-01","2027-03-08"];
+  let abs = 0;
+  return starts.map(s=>{
+    if(s.startsWith("BREAK:")) return {abs:null, start:s.slice(6), isBreak:true};
+    abs++;
+    return {abs, start:s, round:Math.ceil(abs/8), pw:((abs-1)%8)+1};
+  });
+})();
+const SWIM_LAYOUT_FROM = 4; // swim schedule applies from week 4 of round 1 (12 Oct)
+const DAY_NAMES = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
+function calIdx(){ return BB_CAL.findIndex(c=> c.start===state.bootyCal); }
+function calLabel(c){ if(c.isBreak) return "Break"; return (c.round>1?`R${c.round}·`:"")+"W"+c.pw; }
+function currentCal(){
+  const today = new Date(); today.setHours(0,0,0,0);
+  let found = BB_CAL[0];
+  BB_CAL.forEach(c=>{ if(new Date(c.start+"T00:00:00") <= today) found = c; });
+  return found;
+}
+function swimWeekFor(c){ return SWIM_WEEKS.find(w=> w.start===c.start) || null; }
+const PULL_RE = /Row|Pulldown|Pull-Up|Face Pull/;
+
+// One view: the original Booty Builder days (same as your training buddy) with your swims slotted under each day
+function weekDays(c){
+  const sw = swimWeekFor(c);
+  const sess = sw ? swimSessions(sw) : [];
+  const swimsOn = off => sess.filter(s=> s.day===off);
+  const days = DAY_NAMES.map((n,i)=>({day:n, gym:null, extra:null, swims:swimsOn(i), notes:[]}));
+  if(c.isBreak) return {days, sw};
+  const bw = BOOTY.weeks.find(w=> w.num===c.pw);
+  bw.days.forEach(g=>{ days[DAY_NAMES.indexOf(g.day)].gym = g; });
+  // swap the upper days: Upper 2 (pull) on Tuesday, Upper 1 (push) on Friday
+  const tue = days[1], fri = days[4];
+  if(tue.gym && fri.gym && tue.gym.title==="Upper Body Strength 1" && fri.gym.title==="Upper Body Strength 2"){
+    const t = tue.gym; tue.gym = fri.gym; fri.gym = t;
+  }
+  if(!sw) return {days, sw};
+
+  const raceWeek = sw.id==="B8";
+  days.forEach(d=>{
+    if(!d.gym) return;
+    const t = d.gym.title;
+    if(raceWeek && /Optional/.test(t)) {}
+    else if(/Optional/.test(t) && d.swims.length) d.notes.push("Skip this — your swim below replaces it.");
+    else if(/Optional/.test(t)) d.notes.push("Optional — skip it, you're getting your cardio from swimming.");
+    if(t==="Upper Body Strength 1" && !raceWeek) d.notes.push("Optional — Friday is your only rest day, so do it when you feel fresh. Skipping it? Do the push finisher on Wednesday.");
+    if(raceWeek && /Upper|Lower Body Strength 3|Optional/.test(t)) d.notes.push("Busso race week — skip this one.");
+    if(raceWeek && /Lower Body Strength [12]/.test(t)) d.notes.push("Busso race week — go light.");
+  });
+  if(sw.id==="T6") days[5].notes.push("Ocean swim today — do Lower 3 on Sunday instead.");
+  // optional pull finisher on Wednesday (for weeks you skip Friday)
+  const U1 = bw.days.find(g=> g.title==="Upper Body Strength 1");
+  const wed = days.find(x=> x.gym && x.gym.title==="Lower Body Strength 2");
+  if(U1 && !raceWeek && wed){
+    const items = [];
+    U1.sections.forEach(sec=> (sec.items||[]).forEach(it=>{ if(it.log && items.length<2) items.push(it); }));
+    if(items.length) wed.extra = {type:"main", label:"Optional push finisher (from Upper 1)", note:"Only on weeks you'll skip Upper 1 on Friday. 10 mins after your lower session, 2–3 sets each.", items};
+  }
+  return {days, sw};
+}
+
 function renderBooty(){
-  const week = BOOTY.weeks.find(w=>w.num===state.bootyWeek);
-  const availableDays = week.days.map(d=>d.day);
-  if(!availableDays.includes(state.bootyDay)) state.bootyDay = availableDays[0];
-  const day = week.days.find(d=>d.day===state.bootyDay);
+  if(!state.bootyCal){ state.bootyCal = currentCal().start; state.bootyDay = DAY_NAMES[(new Date().getDay()+6)%7]; }
+  const c = BB_CAL[calIdx()] || BB_CAL[0];
 
   let html = `<div class="pillrow" id="weekPills">`;
-  BOOTY.weeks.forEach(w=>{
-    html += `<button class="pill ${w.num===state.bootyWeek?'active booty':''}" data-week="${w.num}">W${w.num}</button>`;
+  BB_CAL.forEach(w=>{
+    html += `<button class="pill ${w.start===c.start?'active booty':''}" data-cal="${w.start}">${calLabel(w)} <span class="pilldate">${fmtShort(addDays(w.start,0))}</span></button>`;
   });
   html += `</div>`;
 
+  const {days, sw} = weekDays(c);
+  const shown = days.filter(d=> d.gym || d.swims.length || d.day==="Friday");
+  if(!shown.find(d=> d.day===state.bootyDay)) state.bootyDay = shown[0].day;
   html += `<div class="pillrow daypills" id="dayPills">`;
-  week.days.forEach(d=>{
-    html += `<button class="pill daypill ${d.day===state.bootyDay?'active booty':''}" data-day="${d.day}">${d.day.slice(0,3)}</button>`;
+  shown.forEach(d=>{
+    const has = d.gym || d.swims.length;
+    html += `<button class="pill daypill ${d.day===state.bootyDay?'active booty':''} ${has?'':'restpill'}" data-day="${d.day}">${d.day.slice(0,3)}${d.swims.length?' 🏊':''}</button>`;
   });
   html += `</div>`;
 
-  const done = getDayDone(state.bootyWeek, state.bootyDay);
-  html += `<div class="daycard">
+  if(sw){
+    const tpInfo = tpForWeek(sw);
+    html += `<div class="weekhead"><div class="daysubtitle">${swimWeekLabel(sw)} · ${fmtShort(addDays(c.start,0))} – ${fmtShort(addDays(c.start,6))}</div>
+      ${sw.focus?`<div class="weekfocus">${sw.focus}</div>`:""}
+      ${sw.block==="tri" ? `<div class="tpline">${tpInfo ? `Test Pace: <b>${fmtTime(tpInfo.tp)}/100m</b>` : `Test Pace not set yet — log your test and targets appear.`}</div>` : ""}
+    </div>`;
+  }
+
+  const d = days.find(x=> x.day===state.bootyDay);
+  const dateStr = fmtDate(addDays(c.start, DAY_NAMES.indexOf(d.day)));
+  if(d.gym) html += renderGymCard(c, d.gym.day, d.gym, d.extra, dateStr, d.notes);
+  else if(d.notes.length) html += `<div class="daycard"><div class="daytitle">${dateStr}</div>${d.notes.map(n=>`<div class="mynote">${n}</div>`).join("")}</div>`;
+  if(d.swims.length){
+    const tpInfo = sw ? tpForWeek(sw) : null;
+    d.swims.forEach(s=> html += renderSwimSession(sw, s, tpInfo));
+  }
+  if(!d.gym && !d.swims.length && !d.notes.length){
+    html += `<div class="daycard"><div class="daytitle">${dateStr}</div><div class="daysubtitle">${c.isBreak ? "Break — nothing planned." : "Rest day."}</div></div>`;
+  }
+  return html;
+}
+
+function renderGymCard(c, dayKey, day, extra, heading, notes){
+  const done = getDayDone(c.abs, dayKey);
+  let html = `<div class="daycard">
     <div class="dayhead">
       <div>
-        <div class="daytitle">${day.day} — Week ${state.bootyWeek}</div>
-        <div class="daysubtitle">${day.title}</div>
+        <div class="daytitle">${day.title}</div>
+        <div class="daysubtitle">${heading} · Booty Builder ${calLabel(c)}</div>
       </div>
       <label class="donetoggle">
-        <input type="checkbox" id="dayDoneBox" ${done?"checked":""}/>
+        <input type="checkbox" id="dayDoneBox" data-week="${c.abs}" data-day="${dayKey}" ${done?"checked":""}/>
         <span>Session done</span>
       </label>
     </div>`;
-
-  day.sections.forEach((sec, si)=>{
-    html += renderSection(sec, si, state.bootyWeek, state.bootyDay);
-  });
-
+  (notes||[]).forEach(n=> html += `<div class="mynote">${n}</div>`);
+  day.sections.forEach((sec, si)=>{ html += renderSection(sec, si, c.abs, dayKey); });
+  if(extra) html += renderSection(extra, 99, c.abs, dayKey).replace('class="seccard sec-main"','class="seccard sec-main sec-optional"');
   html += `</div>`;
   return html;
 }
@@ -4187,6 +5032,7 @@ function renderSection(sec, si, week, day){
   return html;
 }
 
+function absLabel(n){ const r = Math.ceil(n/8), p = ((n-1)%8)+1; return (r>1?`R${r}·`:"")+"W"+p; }
 function renderExerciseRow(it, week){
   if(!it.log){
     return `<div class="exrow exrow-noLog">
@@ -4208,7 +5054,7 @@ function renderExerciseRow(it, week){
       histWeeks.map(w=>{
         const c = (hist[w].C||[]).map(v=>v||'–').join(', ');
         const m = (hist[w].M||[]).map(v=>v||'–').join(', ');
-        return `<tr><td>${w}</td><td>${c}</td><td>${m}</td></tr>`;
+        return `<tr><td>${absLabel(w)}</td><td>${c}</td><td>${m}</td></tr>`;
       }).join("") +
       `</table>`;
   }
@@ -4226,7 +5072,7 @@ function renderExerciseRow(it, week){
     </tr>`;
   }
 
-  const lastStr = last ? `Last time (Wk ${last.week}): C ${(last.C||[]).map(v=>v||'–').join('/')}kg · M ${(last.M||[]).map(v=>v||'–').join('/')}kg` : `First time logging this`;
+  const lastStr = last ? `Last time (${absLabel(last.week)}): C ${(last.C||[]).map(v=>v||'–').join('/')}kg · M ${(last.M||[]).map(v=>v||'–').join('/')}kg` : `First time logging this`;
 
   return `<div class="exrow" data-key="${it.key}" data-week="${week}">
     <div class="exrow-top">
@@ -4345,13 +5191,14 @@ function renderByTypeNav(phase){
 // ============================================================
 function attachHandlers(){
   document.querySelectorAll("#weekPills .pill").forEach(b=>{
-    b.onclick = ()=>{ state.bootyWeek = parseInt(b.dataset.week,10); render(); };
+    b.onclick = ()=>{ state.bootyCal = b.dataset.cal; render(); };
   });
+
   document.querySelectorAll("#dayPills .pill").forEach(b=>{
     b.onclick = ()=>{ state.bootyDay = b.dataset.day; render(); };
   });
   const dayDoneBox = document.getElementById("dayDoneBox");
-  if(dayDoneBox) dayDoneBox.onchange = ()=> setDayDone(state.bootyWeek, state.bootyDay, dayDoneBox.checked);
+  if(dayDoneBox) dayDoneBox.onchange = ()=> setDayDone(parseInt(dayDoneBox.dataset.week,10), dayDoneBox.dataset.day, dayDoneBox.checked);
 
   document.querySelectorAll(".wInput").forEach(inp=>{
     inp.oninput = ()=>{
@@ -4412,7 +5259,7 @@ document.querySelectorAll(".section-toggle button").forEach(b=>{
 })();
 
 document.addEventListener("visibilitychange", async ()=>{
-  if(document.visibilityState === "visible"){ await loadAllData(); render(); }
+  if(document.visibilityState === "visible"){ await loadAllData(); render(true); }
 });
 </script>
 </body>
