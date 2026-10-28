@@ -4101,8 +4101,8 @@ const SWIM_WEEKS = [
 ];
 SWIM_WEEKS.forEach((w,i)=> w.order = i);
 
-// From 2 Nov: endurance/pool 1 swim on Friday, open water on Saturday, Lower 3 on Sunday
-const NEW_LAYOUT_FROM = "2026-11-02";
+// From 26 Oct: endurance/pool 1 swim on Friday, open water on Saturday, Lower 3 on Sunday
+const NEW_LAYOUT_FROM = "2026-10-26";
 function newLayout(w){ return !!w && w.start >= NEW_LAYOUT_FROM; }
 function sundayEvent(w){ return !!w && (w.id==="B3R" || w.id==="B8"); }
 function swimWeekLabel(w){
@@ -4583,7 +4583,7 @@ function renderSwimPlan(){
       <li><b>Sat</b> — Open water / big swim · bike or easy run (alternating weeks)</li>
       <li><b>Sun</b> — Lower 3 · optional drill swim (tri block)</li>
     </ul>
-    <div class="secnote">This layout starts 2 Nov. Everything lives in the Booty Builder tab, and your swims sit under each day, marked 🏊.</div>
+    <div class="secnote">This layout starts 26 Oct. Everything lives in the Booty Builder tab, and your swims sit under each day, marked 🏊.</div>
   </div>
   <div class="daycard"><div class="daytitle">Timeline</div>
     <ul class="reflist">
@@ -4597,7 +4597,7 @@ function renderSwimPlan(){
   </div>
   <div class="daycard"><div class="daytitle">Sources</div>
     <ul class="reflist">
-      <li>Tri block: "Boost your swim skills in 8 weeks" (220 Triathlon, coach Dermott Hayes). Friday (Tuesday before 2 Nov) = the plan's Monday swim, Thursday = the plan's Wednesday swim. Using the Olympic/70.3 test. Bike sessions from the same plan.</li>
+      <li>Tri block: "Boost your swim skills in 8 weeks" (220 Triathlon, coach Dermott Hayes). Friday (Tuesday before 26 Oct) = the plan's Monday swim, Thursday = the plan's Wednesday swim. Using the Olympic/70.3 test. Bike sessions from the same plan.</li>
       <li>Busselton block: Swimming Women Busselton Jetty Swim training program (full 3.6km).</li>
       <li>Added by Claude: weekend drill swims (technique sets from the Busselton program, since the tri plan's p90 session wasn't included), weekend open water progression in the tri block, easy run weeks, the break and repeat week.</li>
     </ul>
