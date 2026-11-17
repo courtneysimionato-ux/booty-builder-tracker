@@ -132,6 +132,15 @@ h1,h2,h3,.daytitle,.phasefullname,.brand,.pill{ font-family:'Oswald',system-ui,s
 .section-toggle{ gap:6px; }
 .section-toggle button{ padding:10px 4px; font-size:0.84rem; }
 .section-toggle button.active[data-section="drills"]{ background:var(--amber); border-color:var(--amber); color:#241a06; }
+.section-toggle button.active[data-section="home"]{ background:var(--core); border-color:var(--core); color:#04120f; }
+@media (max-width:420px){ .section-toggle{ gap:4px; } .section-toggle button{ padding:9px 2px; font-size:0.76rem; } }
+.homelist{ list-style:none; padding-left:0; }
+.homelist li{ padding:7px 0; border-bottom:1px solid var(--border); }
+.homelist li:last-child{ border-bottom:none; }
+.homeex{ font-weight:600; }
+.hometarget{ color:var(--core); font-family:'Oswald'; font-weight:600; font-size:0.88rem; }
+.homecue{ color:var(--text-faint); font-size:0.8rem; margin-top:2px; }
+.homesugg td{ font-size:0.66rem; color:var(--text-faint); font-family:'Oswald'; padding-top:0; }
 .drillgroup{ font-family:'Oswald'; font-weight:600; font-size:0.8rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-faint); margin:16px 2px 6px; }
 .drillcard{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:8px; }
 .drillcard summary{ list-style:none; cursor:pointer; padding:12px 14px; display:flex; flex-direction:column; gap:2px; }
@@ -194,6 +203,7 @@ h1,h2,h3,.daytitle,.phasefullname,.brand,.pill{ font-family:'Oswald',system-ui,s
     <nav class="section-toggle">
       <button data-section="booty" class="active">Booty Builder</button>
       <button data-section="core">Deep Core</button>
+      <button data-section="home">Home</button>
       <button data-section="swim">Swim</button>
       <button data-section="drills">Drills</button>
     </nav>
@@ -4703,6 +4713,7 @@ let state = {
   bootyWeek: 1,
   bootyDay: "Monday",
   corePhase: "p1",
+  homeWeek: 1,
   coreWeek: 1,
   coreDay: "Mon",
   swimTab: "pace",
@@ -4907,7 +4918,7 @@ function render(keepScroll){
   const app = document.getElementById("app");
   if(!dataReady){ app.innerHTML = `<div class="loadingnote">Loading your data…</div>`; return; }
   const y = window.scrollY;
-  const body = state.section === "booty" ? renderBooty() : state.section === "swim" ? renderSwim() : state.section === "drills" ? renderSwimDrills() : renderCore();
+  const body = state.section === "booty" ? renderBooty() : state.section === "swim" ? renderSwim() : state.section === "drills" ? renderSwimDrills() : state.section === "home" ? renderHome() : renderCore();
   app.innerHTML = body + renderSyncBadge();
   attachHandlers();
   attachSwimHandlers();
@@ -5253,9 +5264,108 @@ function renderByTypeNav(phase){
 }
 
 // ============================================================
+// HOME CALISTHENICS — daily 10–15 min micro-routine (submaximal, 3 reps in reserve)
+// Ticks stored in core_grid under phase_key "home1", "home2"… (one per 4-week round)
+// ============================================================
+const HOME = {
+  suggested: { Mon:"Short", Tue:"Short", Wed:"Short", Thu:"Full", Fri:"Full", Sat:"Short", Sun:"Rest" },
+  // targets: [Week 1, Week 2, Week 3, Week 4]
+  exercises: [
+    { name:"Dead bug", tempo:"3 s out, exhale", cue:"Lower back pressed to the floor; reach only as far as it stays down.",
+      targets:["6 per side","7 per side","8 per side","8 per side — or harder: straighter legs, 6 per side"], short:true },
+    { name:"Bird dog", tempo:"2 s hold", cue:"Hips level, like a cup of water on your back.",
+      targets:["6 per side","7 per side","8 per side","8 per side — or harder: 3 s hold"], short:true },
+    { name:"Incline push-up (table edge)", tempo:"2 s down", cue:"Squeeze glutes; straight line head to heels.",
+      targets:["6–8","8–9","10","10 — or harder: lower surface, 6–8"] },
+    { name:"Table row or band row (doorframe)", tempo:"2 s down", cue:"Shoulder blades back first, then elbows. Test the table is solid.",
+      targets:["8","9","10","10 — or harder: feet further forward, 8"] },
+    { name:"Side plank from knees", tempo:"hold", cue:"Hips forward and lifted; elbow under shoulder.",
+      targets:["15–20 s per side","20–25 s per side","30 s per side","30 s — or harder: from feet, 15–20 s"], short:true },
+    { name:"Floor leg raise (holding couch legs)", tempo:"3 s down", cue:"Knees bent; back flat; stop lowering before it arches.",
+      targets:["5–6","6–7","8","8 — or harder: one leg straighter, 5–6"] },
+    { name:"Band pull-apart", tempo:"2 s back", cue:"Arms straight, ribs down.",
+      targets:["12","14","15","15 — or harder: thicker band, 12"], short:true }
+  ]
+};
+
+function renderHome(){
+  const round = state.homeRound || 1;
+  const wk = state.homeWeek || 1;
+  const phaseKey = "home" + round;
+
+  let html = `<div class="pillrow" id="homeRoundPills">`;
+  for(let r=1; r<=3; r++){
+    html += `<button class="pill ${r===round?'active core':''}" data-homeround="${r}">Round ${r}</button>`;
+  }
+  html += `</div>`;
+  html += `<div class="pillrow" id="homeWeekPills">`;
+  for(let w=1; w<=4; w++){
+    html += `<button class="pill ${w===wk?'active core':''}" data-homeweek="${w}">Wk ${w}</button>`;
+  }
+  html += `</div>`;
+
+  html += `<div class="phasefullname">Home Calisthenics — Week ${wk} <span class="secnote">· about 12 min · finish every set with 3 reps in reserve</span></div>`;
+  html += `<div class="daycard">`;
+
+  html += `<div class="seccard sec-ref">
+    <div class="seclabel">Full routine · 2 rounds</div>
+    <ul class="reflist homelist">${HOME.exercises.map(e=>`
+      <li><div class="homeex">${e.name}</div>
+        <div class="hometarget">${e.targets[wk-1]} <span class="secnote" style="display:inline">· ${e.tempo}</span></div>
+        <div class="homecue">${e.cue}</div></li>`).join("")}
+    </ul>
+    <div class="secnote">Rest about 20 s between exercises and 60 s between rounds.</div>
+  </div>`;
+
+  html += `<div class="seccard sec-ref">
+    <div class="seclabel">Short version · 1 round · 5–6 min</div>
+    <ul class="reflist">${HOME.exercises.filter(e=>e.short).map(e=>`<li>${e.name} — ${e.targets[wk-1].split(" — ")[0]}</li>`).join("")}</ul>
+    <div class="secnote">Use on gym days, or whenever legs or shoulders are already tired.</div>
+  </div>`;
+
+  html += `<div class="seccard sec-ref">
+    <div class="seclabel">How to progress</div>
+    <ul class="reflist">
+      <li>Weeks 1–3: add reps or hold time only while every rep stays clean and your back stays flat.</li>
+      <li>Week 4: move 1–2 exercises to the harder version; keep the rest at Week 3 numbers.</li>
+      <li>Next round: start the harder versions at the Week 1 numbers.</li>
+      <li>Sore going into a gym session? Drop back a week. No heel drops or jumping while the Achilles settles.</li>
+    </ul>
+  </div>`;
+  html += `</div>`;
+
+  // tick grid with suggested version per day
+  const grid = getCoreGrid(phaseKey);
+  html += `<div class="gridwrap"><div class="gridtitle">Daily tick-off — Round ${round} <span class="secnote">(C = your tick, M = gym buddy)</span></div><table class="dcgrid"><thead><tr><th></th>`;
+  DAY_ORDER.forEach(d=> html += `<th>${d}</th>`);
+  html += `</tr></thead><tbody><tr class="homesugg"><td class="wklabel"></td>`;
+  DAY_ORDER.forEach(d=> html += `<td>${HOME.suggested[d]}</td>`);
+  html += `</tr>`;
+  for(let w=1; w<=4; w++){
+    html += `<tr><td class="wklabel">Wk ${w}</td>`;
+    DAY_ORDER.forEach(d=>{
+      const cell = grid[w+"_"+d] || {};
+      html += `<td><div class="gridpair">
+        <label class="gridlabel">C<input type="checkbox" class="gridbox" data-phase="${phaseKey}" data-week="${w}" data-day="${d}" data-field="C" ${cell.C?"checked":""}/></label>
+        <label class="gridlabel">M<input type="checkbox" class="gridbox" data-phase="${phaseKey}" data-week="${w}" data-day="${d}" data-field="M" ${cell.M?"checked":""}/></label>
+      </div></td>`;
+    });
+    html += `</tr>`;
+  }
+  html += `</tbody></table></div>`;
+  return html;
+}
+
+// ============================================================
 // EVENT HANDLERS
 // ============================================================
 function attachHandlers(){
+  document.querySelectorAll("#homeRoundPills .pill").forEach(b=>{
+    b.onclick = ()=>{ state.homeRound = parseInt(b.dataset.homeround,10); state.homeWeek = 1; render(); };
+  });
+  document.querySelectorAll("#homeWeekPills .pill").forEach(b=>{
+    b.onclick = ()=>{ state.homeWeek = parseInt(b.dataset.homeweek,10); render(); };
+  });
   document.querySelectorAll("#weekPills .pill").forEach(b=>{
     b.onclick = ()=>{ state.bootyCal = b.dataset.cal; render(); };
   });
