@@ -3964,7 +3964,7 @@ const DEEPCORE = {
 // ============================================================
 
 const SWIM_EVENTS = [
-  {date:"2026-11-21", name:"Ocean swim", dist:"1.25km", key:"ev_nov"},
+  {date:"2026-11-28", name:"Ocean swim", dist:"1.25km", key:"ev_nov"},
   {date:"2027-01-10", name:"Ocean swim", dist:"2.5km", key:"ev_jan"},
   {date:"2027-02-14", name:"Busselton Jetty Swim", dist:"3.6km", key:"ev_busso"}
 ];
@@ -4095,8 +4095,8 @@ const SWIM_WEEKS = [
   {id:"T3", start:"2026-10-26", block:"tri", n:3, bb:6},
   {id:"T4", start:"2026-11-02", block:"tri", n:4, bb:7, focus:"Test #2 on Saturday — swim first, before Lower 3. Keep Thursday's pace swim controlled. Your targets update automatically."},
   {id:"T5", start:"2026-11-09", block:"tri", n:5, bb:8},
-  {id:"T6", start:"2026-11-16", block:"tri", n:6, bb:1, focus:"Ocean swim 1.25km on Saturday 21 Nov. Keep Thursday controlled and Friday easy (or rest). Lower 3 after the swim if you feel good, otherwise Sunday."},
-  {id:"T7", start:"2026-11-23", block:"tri", n:7, bb:2},
+  {id:"T6", start:"2026-11-16", block:"tri", n:6, bb:1, focus:"Ocean swim moved to Sat 28 Nov (weather) — this is a normal week."},
+  {id:"T7", start:"2026-11-23", block:"tri", n:7, bb:2, focus:"Ocean swim 1.25km on Saturday 28 Nov. Keep Thursday controlled and Friday easy (or rest). Lower 3 after the swim if you feel good, otherwise Sunday."},
   {id:"T8", start:"2026-11-30", block:"tri", n:8, bb:3, focus:"Final test on Saturday — swim first, before Lower 3."},
   {id:"B1", start:"2026-12-07", block:"busso", bb:4, focus:"Busselton block begins: 2 pool + 1 open water a week."},
   {id:"B2", start:"2026-12-14", block:"busso", bb:5},
@@ -4136,7 +4136,7 @@ function bbLine(w){
   if(w.id==="B8") return `Booty Builder Wk ${wk} (light): Mon Lower 1 · Wed Lower 2. Skip Sat Lower 3 and Upper.`;
   if(newLayout(w)){
     if(wk===8) return `Booty Builder Wk 8: Mon Lower 1 · Tue Upper 2 · Wed Lower 2 (moved from Thu). No Lower 3 in Wk 8.`;
-    const l3 = w.id==="T6" ? "Sat Lower 3 after the ocean swim if you feel good, otherwise Sun" : "Sat Lower 3";
+    const l3 = w.id==="T7" ? "Sat Lower 3 after the ocean swim if you feel good, otherwise Sun" : "Sat Lower 3";
     return `Booty Builder Wk ${wk}: Mon Lower 1 · Tue Upper 2 · Wed Lower 2 + push finisher · ${l3}. Upper 1 and Thursday cardio dropped.`;
   }
   if(wk===8) return `Booty Builder Wk 8: Mon Lower 1 · Tue Upper 2 (from Fri) · Wed Lower 2 (from Thu). No Saturday session in Wk 8.`;
@@ -4198,10 +4198,10 @@ function swimSessionsNew(w){
   if(w.block==="tri"){
     const n = w.n, test = (n===1||n===4||n===8);
     const easy = (sub)=> ({id:"OW", day:4, title:"Easy continuous swim (optional)", sub, sets:[owLog("Continuous swim "+(OW_TRI[n]||"30–40 min"),"Pool without touching the walls, or the ocean. Steady breathing, practise sighting every 6–8 strokes.","ow_tri")]});
-    if(n===6){
+    if(n===7){
       S.push({id:"B", day:3, title:"Pace swim", sub:"Keep it controlled — ocean swim on Saturday", sets:TRI_B[n], note:TRI_NOTE});
       S.push({id:"A", day:4, title:"Endurance swim (optional)", sub:"Keep it easy, or rest before tomorrow's ocean swim", sets:TRI_A[n], note:TRI_NOTE});
-      S.push({id:"EV", day:5, title:"EVENT — Ocean swim 1.25km", sub:"Saturday 21 November · key swim of the week", sets:[{label:"Race result", log:{type:"fields", fields:[{k:"time",label:"Time",kind:"time"},{k:"place",label:"Place / notes",kind:"text"}]}, setKey:"ev_nov"}], event:true});
+      S.push({id:"EV", day:5, title:"EVENT — Ocean swim 1.25km", sub:"Saturday 28 November · key swim of the week", sets:[{label:"Race result", log:{type:"fields", fields:[{k:"time",label:"Time",kind:"time"},{k:"place",label:"Place / notes",kind:"text"}]}, setKey:"ev_nov"}], event:true});
     } else if(test){
       S.push({id:"B", day:3, title:"Pace swim", sub:"Keep it controlled — test on Saturday", sets:TRI_B[n], note:TRI_NOTE});
       S.push(easy("Keep it easy, or rest before Saturday's test."));
@@ -4646,7 +4646,7 @@ function renderSwimPlan(){
   <div class="daycard"><div class="daytitle">Timeline</div>
     <ul class="reflist">
       <li><b>12 Oct – 6 Dec</b> — Tri swim plan Weeks 1–8 (tests Tue 13 Oct, Sat 7 Nov, Sat 5 Dec)</li>
-      <li><b>Sat 21 Nov</b> — Ocean swim 1.25km</li>
+      <li><b>Sat 28 Nov</b> — Ocean swim 1.25km (moved from 21 Nov)</li>
       <li><b>7 – 27 Dec</b> — Busselton Weeks 1–3</li>
       <li><b>27 Dec – 4 Jan</b> — Break</li>
       <li><b>4 – 10 Jan</b> — Busselton Week 3 again · <b>Sun 10 Jan</b> ocean swim 2.5km</li>
@@ -4991,11 +4991,11 @@ function weekDays(c){
     else if(/Optional/.test(t)) d.notes.push("Optional — skip it, you're getting your cardio from swimming.");
     if(t==="Upper Body Strength 1" && !raceWeek) d.notes.push(NL ? "Not part of your week anymore — the Wednesday push finisher covers it. Here for logging only if you do it." : "Optional — Friday is your only rest day, so do it when you feel fresh. Skipping it? Do the push finisher on Wednesday.");
     if(NL && t==="Upper Body Strength 1") d.gymAfter = true;
-    if(NL && t==="Lower Body Strength 3" && !raceWeek && sw.id!=="T6" && d.swims.length) d.notes.push((sw.n===4||sw.n===8) && sw.block==="tri" ? "Test day — swim first, then Lower 3." : "Do your swim before or after — either order is fine.");
+    if(NL && t==="Lower Body Strength 3" && !raceWeek && sw.id!=="T7" && d.swims.length) d.notes.push((sw.n===4||sw.n===8) && sw.block==="tri" ? "Test day — swim first, then Lower 3." : "Do your swim before or after — either order is fine.");
     if(raceWeek && /Upper|Lower Body Strength 3|Optional/.test(t)) d.notes.push("Busso race week — skip this one.");
     if(raceWeek && /Lower Body Strength [12]/.test(t)) d.notes.push("Busso race week — go light.");
   });
-  if(sw.id==="T6") days[5].notes.push(NL ? "Ocean swim today — do Lower 3 afterwards only if you feel good, otherwise on Sunday." : "Ocean swim today — do Lower 3 on Sunday instead.");
+  if(sw.id==="T7") days[5].notes.push(NL ? "Ocean swim today — do Lower 3 afterwards only if you feel good, otherwise on Sunday." : "Ocean swim today — do Lower 3 on Sunday instead.");
   // optional pull finisher on Wednesday (for weeks you skip Friday)
   const U1 = bw.days.find(g=> g.title==="Upper Body Strength 1");
   const wed = days.find(x=> x.gym && x.gym.title==="Lower Body Strength 2");
